@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИИ-помощник — Instrumenty-AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
+    <style>
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+        
+        .message.user {
+            justify-content: flex-end;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 0.8rem 1rem;
+            border-radius: 15px;
+            background: #3498db;
+            color: white;
+        }
+        
+        .message.bot .message-content {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .message-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #3498db;
+            color: white;
+        }
+        
+        .chat-input-area {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+        }
+        
+        .send-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+        
+        .quick-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .quick-btn {
+            background: #ecf0f1;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .quick-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">📚 Instrumenty-AI</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>🤖 ИИ-помощник в учебе</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">Задайте вопрос о любой теме — я помогу разобраться!</p>
+        
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-icon">🤖</div>
+                    <div class="message-content">
+                        Привет! Я ваш ИИ-помощник. Могу помочь с:<br>
+                        • Объяснением сложных тем<br>
+                        • Решением задач<br>
+                        • Подготовкой к экзаменам<br>
+                        • Советами по учебе<br><br>
+                        Задайте свой вопрос!
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="userInput" placeholder="Напишите ваш вопрос..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button class="send-btn" onclick="sendMessage()">Отправить</button>
+            </div>
+        </div>
+        
+        <div class="quick-questions">
+            <button class="quick-btn" onclick="quickQuestion('Что такое искусственный интеллект?')">Что такое ИИ?</button>
+            <button class="quick-btn" onclick="quickQuestion('Как эффективно учиться?')">Как эффективно учиться?</button>
+            <button class="quick-btn" onclick="quickQuestion('Что такое машинное обучение?')">Что такое ML?</button>
+            <button class="quick-btn" onclick="quickQuestion('Как подготовиться к экзамену?')">Подготовка к экзамену</button>
+            <button class="quick-btn" onclick="quickQuestion('Нейросети для учебы')">Нейросети для учебы</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
+    </footer>
+
+    <script>
+        // База знаний для ИИ-помощника
+        const knowledgeBase = {
+            'искусственный интеллект': 'Искусственный интеллект (ИИ) — это область компьютерных наук, которая создает системы, способные выполнять задачи, требующие человеческого интеллекта: обучение, распознавание речи, принятие решений и другие.',
+            'машинное обучение': 'Машинное обучение — это подраздел ИИ, где системы обучаются на данных, выявляют закономерности и делают прогнозы без явного программирования каждого шага.',
+            'нейросеть': 'Нейронная сеть — это математическая модель, вдохновленная работой человеческого мозга. Она состоит из нейронов, соединенных между собой, и обучается на примерах.',
+            'учеба эффективно': 'Для эффективной учебы: 1) Используйте активное повторение 2) Применяйте метод Pomodoro (25 минут учебы, 5 отдыха) 3) Объясняйте материал другим 4) Делайте конспекты своими словами 5) Регулярно повторяйте пройденное.',
+            'экзамен подготовка': 'Как подготовиться к экзамену: 1) Составьте план подготовки 2) Разбейте материал на части 3) Используйте тесты для самопроверки 4) Отдыхайте между занятиями 5) Высыпайтесь перед экзаменом.',
+            'программирование': 'Начать программировать можно с: Python (простой и понятный), JavaScript (для веб-разработки) или Scratch (для детей). Главное — практиковаться каждый день и делать небольшие проекты.',
+            'английский язык': 'Для изучения английского: смотрите фильмы с субтитрами, читайте книги по уровню, используйте приложения для практики, общайтесь с носителями языка, учите по 10-15 слов в день.'
+        };
+        
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const question = input.value.trim();
+            if (!question) return;
+            
+            // Добавляем вопрос пользователя
+            addMessage(question, 'user');
+            input.value = '';
+            
+            // Генерируем ответ
+            setTimeout(() => {
+                const answer = generateAnswer(question);
+                addMessage(answer, 'bot');
+            }, 500);
+        }
+        
+        function quickQuestion(question) {
+            document.getElementById('userInput').value = question;
+            sendMessage();
+        }
+        
+        function addMessage(text, sender) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            if (sender === 'bot') {
+                messageDiv.innerHTML = `
+                    <div class="message-icon">🤖</div>
+                    <div class="message-content">${text}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content">${text}</div>
+                    <div class="message-icon">👤</div>
+                `;
+            }
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        function generateAnswer(question) {
+            const lowerQuestion = question.toLowerCase();
+            
+            // Поиск по ключевым словам
+            for (let [keyword, answer] of Object.entries(knowledgeBase)) {
+                if (lowerQuestion.includes(keyword)) {
+                    return answer + '<br><br>❓ Еще вопросы? Я готов помочь!';
+                }
+            }
+            
+            // Если нет точного совпадения
+            return '🤔 Интересный вопрос! Я еще учусь отвечать на такие вопросы. Попробуйте спросить о:<br><br>' +
+                   '• Искусственном интеллекте<br>' +
+                   '• Машинном обучении<br>' +
+                   '• Эффективной учебе<br>' +
+                   '• Подготовке к экзаменам<br>' +
+                   '• Программировании<br>' +
+                   '• Английском языке<br><br>' +
+                   'Или задайте вопрос по-другому!';
+        }
+    </script>
+</body>
+</html>
