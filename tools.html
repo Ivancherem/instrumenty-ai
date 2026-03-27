@@ -5,10 +5,177 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Инструменты — Instrumenty-AI</title>
     <link rel="stylesheet" href="css/style.css">
-</head>
     <!-- Favicon (иконка сайта) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white'%3E📚%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white'%3E📚%3C/text%3E%3C/svg%3E">
+    <style>
+        /* Стили для модального окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+        .close-modal:hover {
+            color: #333;
+        }
+        .modal h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        .modal input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .subscribe-btn {
+            background: #3498db;
+            color: white;
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .subscribe-btn:hover {
+            background: #2980b9;
+        }
+        .success-message {
+            color: #27ae60;
+            text-align: center;
+            padding: 1rem;
+            display: none;
+        }
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .tool-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+        .tool-card h3 {
+            color: #3498db;
+            margin-bottom: 1rem;
+        }
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
 <body>
     <header>
         <nav>
@@ -32,32 +199,32 @@
             <div class="tool-card">
                 <h3>📝 Генератор тестов</h3>
                 <p>Создавайте тесты для проверки знаний с помощью ИИ. Автоматическая проверка и статистика.</p>
-                <a href="#" class="btn">Скоро</a>
+                <button class="btn" onclick="openModal('Генератор тестов', '📝')">Скоро</button>
             </div>
             <div class="tool-card">
                 <h3>📊 Анализ успеваемости</h3>
                 <p>Отслеживайте прогресс студентов в реальном времени. Диаграммы и отчеты.</p>
-                <a href="#" class="btn">Скоро</a>
+                <button class="btn" onclick="openModal('Анализ успеваемости', '📊')">Скоро</button>
             </div>
             <div class="tool-card">
                 <h3>🎯 Интерактивные задания</h3>
                 <p>Увлекательные упражнения для закрепления материала. 50+ шаблонов.</p>
-                <a href="#" class="btn">Скоро</a>
+                <button class="btn" onclick="openModal('Интерактивные задания', '🎯')">Скоро</button>
             </div>
             <div class="tool-card">
                 <h3>🤖 ИИ-помощник</h3>
                 <p>Интеллектуальный помощник для учебы. Ответы на вопросы и объяснения.</p>
-                <a href="#" class="btn">Скоро</a>
+                <button class="btn" onclick="openModal('ИИ-помощник', '🤖')">Скоро</button>
             </div>
             <div class="tool-card">
                 <h3>📚 Конструктор уроков</h3>
                 <p>Создавайте готовые уроки с презентациями, тестами и заданиями за 10 минут.</p>
-                <a href="#" class="btn">Скоро</a>
+                <button class="btn" onclick="openModal('Конструктор уроков', '📚')">Скоро</button>
             </div>
             <div class="tool-card">
                 <h3>🎓 Курсы и вебинары</h3>
                 <p>Доступ к записям вебинаров и курсам от ведущих экспертов.</p>
-                <a href="#" class="btn">Скоро</a>
+                <button class="btn" onclick="openModal('Курсы и вебинары', '🎓')">Скоро</button>
             </div>
         </div>
     </main>
@@ -65,5 +232,70 @@
     <footer>
         <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
     </footer>
+
+    <!-- Модальное окно -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">📝 Генератор тестов</h2>
+            <p id="modalDesc">Подпишитесь, чтобы узнать первым о запуске этого инструмента!</p>
+            <input type="email" id="subscriberEmail" placeholder="Ваш email">
+            <button class="subscribe-btn" onclick="subscribe()">Подписаться</button>
+            <div id="successMessage" class="success-message">✅ Спасибо! Мы сообщим вам о запуске.</div>
+        </div>
+    </div>
+
+    <script>
+        let currentTool = '';
+        
+        function openModal(toolName, icon) {
+            currentTool = toolName;
+            document.getElementById('modalTitle').innerHTML = `${icon} ${toolName}`;
+            document.getElementById('modal').style.display = 'flex';
+            document.getElementById('subscriberEmail').value = '';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+        
+        function subscribe() {
+            const email = document.getElementById('subscriberEmail').value;
+            if (!email) {
+                alert('Введите email');
+                return;
+            }
+            if (!email.includes('@')) {
+                alert('Введите корректный email');
+                return;
+            }
+            
+            // Сохраняем подписку в localStorage
+            let subscriptions = JSON.parse(localStorage.getItem('subscriptions') || '[]');
+            subscriptions.push({
+                tool: currentTool,
+                email: email,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
+            
+            // Показываем сообщение об успехе
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Закрываем окно через 2 секунды
+            setTimeout(() => {
+                closeModal();
+            }, 2000);
+        }
+        
+        // Закрытие по клику вне окна
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
