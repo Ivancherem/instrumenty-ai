@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ успеваемости — Instrumenty-AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        .subjects-list {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .subject-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .subject-name {
+            font-weight: bold;
+            width: 120px;
+        }
+        .grade-input {
+            width: 60px;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .grade-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .grade-excellent { background: #27ae60; color: white; }
+        .grade-good { background: #3498db; color: white; }
+        .grade-average { background: #f39c12; color: white; }
+        .grade-poor { background: #e74c3c; color: white; }
+        .add-subject {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .add-subject input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .progress-bar {
+            width: 200px;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            transition: width 0.3s;
+        }
+        @media (max-width: 768px) {
+            .subject-item {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .progress-bar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">📚 Instrumenty-AI</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="blog.html">Блог</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>📊 Анализ успеваемости</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">Отслеживайте свои оценки и прогресс в учебе</p>
+        
+        <div class="stats-grid" id="statsGrid"></div>
+        
+        <div class="subjects-list">
+            <h2>Предметы и оценки</h2>
+            <div id="subjectsContainer"></div>
+            <div class="add-subject">
+                <input type="text" id="newSubject" placeholder="Название предмета">
+                <button class="btn" onclick="addSubject()">+ Добавить предмет</button>
+            </div>
+        </div>
+        
+        <button class="btn" onclick="resetData()" style="margin-top: 1rem; background: #e74c3c;">Сбросить все данные</button>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
+    </footer>
+
+    <script>
+        // Загрузка данных
+        let subjects = JSON.parse(localStorage.getItem('progressSubjects') || '[]');
+        
+        function getGradeInfo(grade) {
+            if (grade >= 4.5) return { text: 'Отлично', class: 'grade-excellent', color: '#27ae60' };
+            if (grade >= 3.5) return { text: 'Хорошо', class: 'grade-good', color: '#3498db' };
+            if (grade >= 2.5) return { text: 'Удовлетворительно', class: 'grade-average', color: '#f39c12' };
+            return { text: 'Требует внимания', class: 'grade-poor', color: '#e74c3c' };
+        }
+        
+        function calculateAverage() {
+            if (subjects.length === 0) return 0;
+            let sum = 0;
+            subjects.forEach(s => {
+                let avg = s.grades.length ? s.grades.reduce((a,b) => a + b, 0) / s.grades.length : 0;
+                sum += avg;
+            });
+            return (sum / subjects.length).toFixed(1);
+        }
+        
+        function getTotalGrades() {
+            let total = 0;
+            subjects.forEach(s => total += s.grades.length);
+            return total;
+        }
+        
+        function getBestSubject() {
+            if (subjects.length === 0) return '-';
+            let best = subjects[0];
+            subjects.forEach(s => {
+                let bestAvg = best.grades.length ? best.grades.reduce((a,b) => a + b, 0) / best.grades.length : 0;
+                let sAvg = s.grades.length ? s.grades.reduce((a,b) => a + b, 0) / s.grades.length : 0;
+                if (sAvg > bestAvg) best = s;
+            });
+            return best.name;
+        }
+        
+        function renderStats() {
+            const avg = calculateAverage();
+            const gradeInfo = getGradeInfo(avg);
+            const statsHtml = `
+                <div class="stat-card">
+                    <div class="stat-value">${avg}</div>
+                    <div class="stat-label">Средний балл</div>
+                    <div class="grade-badge ${gradeInfo.class}" style="display: inline-block; margin-top: 0.5rem;">${gradeInfo.text}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${subjects.length}</div>
+                    <div class="stat-label">Предметов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${getTotalGrades()}</div>
+                    <div class="stat-label">Всего оценок</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${getBestSubject()}</div>
+                    <div class="stat-label">Лучший предмет</div>
+                </div>
+            `;
+            document.getElementById('statsGrid').innerHTML = statsHtml;
+        }
+        
+        function renderSubjects() {
+            const container = document.getElementById('subjectsContainer');
+            if (subjects.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999;">Добавьте предметы и оценки</p>';
+                return;
+            }
+            
+            container.innerHTML = subjects.map((subject, idx) => {
+                const avg = subject.grades.length ? (subject.grades.reduce((a,b) => a + b, 0) / subject.grades.length).toFixed(1) : '—';
+                const gradeInfo = getGradeInfo(parseFloat(avg) || 0);
+                const progress = subject.grades.length ? (parseFloat(avg) / 5 * 100) : 0;
+                
+                return `
+                    <div class="subject-item">
+                        <div class="subject-name">${escapeHtml(subject.name)}</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                ${subject.grades.map((grade, gIdx) => `
+                                    <span class="grade-badge ${getGradeInfo(grade).class}" style="cursor: pointer;" onclick="removeGrade(${idx}, ${gIdx})">${grade}</span>
+                                `).join('')}
+                                <input type="number" id="grade-${idx}" step="0.5" min="2" max="5" placeholder="+ оценка" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 5px;">
+                                <button class="btn" onclick="addGrade(${idx})" style="padding: 0.3rem 0.8rem; margin: 0;">Добавить</button>
+                            </div>
+                        </div>
+                        <div style="min-width: 80px; text-align: center;">
+                            <strong>Ср. ${avg}</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%; background: ${gradeInfo.color};"></div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteSubject(${idx})" style="background: #e74c3c; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 5px; cursor: pointer;">🗑</button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function addSubject() {
+            const input = document.getElementById('newSubject');
+            const name = input.value.trim();
+            if (!name) {
+                alert('Введите название предмета');
+                return;
+            }
+            subjects.push({ name: name, grades: [] });
+            localStorage.setItem('progressSubjects', JSON.stringify(subjects));
+            input.value = '';
+            renderStats();
+            renderSubjects();
+        }
+        
+        function deleteSubject(idx) {
+            if (confirm('Удалить предмет?')) {
+                subjects.splice(idx, 1);
+                localStorage.setItem('progressSubjects', JSON.stringify(subjects));
+                renderStats();
+                renderSubjects();
+            }
+        }
+        
+        function addGrade(idx) {
+            const input = document.getElementById(`grade-${idx}`);
+            let grade = parseFloat(input.value);
+            if (isNaN(grade) || grade < 2 || grade > 5) {
+                alert('Введите оценку от 2 до 5 (можно с шагом 0.5)');
+                return;
+            }
+            subjects[idx].grades.push(grade);
+            subjects[idx].grades.sort((a,b) => b - a);
+            localStorage.setItem('progressSubjects', JSON.stringify(subjects));
+            input.value = '';
+            renderStats();
+            renderSubjects();
+        }
+        
+        function removeGrade(sIdx, gIdx) {
+            subjects[sIdx].grades.splice(gIdx, 1);
+            localStorage.setItem('progressSubjects', JSON.stringify(subjects));
+            renderStats();
+            renderSubjects();
+        }
+        
+        function resetData() {
+            if (confirm('Удалить все данные об успеваемости?')) {
+                subjects = [];
+                localStorage.setItem('progressSubjects', JSON.stringify(subjects));
+                renderStats();
+                renderSubjects();
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Инициализация
+        renderStats();
+        renderSubjects();
+    </script>
+</body>
+</html>
