@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курсы и вебинары — Instrumenty-AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
+    <style>
+        .category-filter {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+        .filter-btn {
+            background: #ecf0f1;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+        .course-image {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .course-content {
+            padding: 1.5rem;
+        }
+        .course-category {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #3498db;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        .course-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        .course-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        .course-duration {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        .enroll-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .enroll-btn:hover {
+            background: #2980b9;
+        }
+        .enrolled {
+            background: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">📚 Instrumenty-AI</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="blog.html">Блог</a></li>
+                <li><a href="courses.html">Курсы</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>🎓 Курсы и вебинары</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">Бесплатные образовательные курсы для саморазвития</p>
+        
+        <div class="category-filter" id="categoryFilter"></div>
+        <div class="courses-grid" id="coursesGrid"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
+    </footer>
+
+    <script>
+        let courses = [
+            {
+                id: 1,
+                title: "Введение в искусственный интеллект",
+                description: "Узнайте основы ИИ, машинного обучения и нейросетей. Практические примеры и простые объяснения.",
+                category: "Искусственный интеллект",
+                icon: "🤖",
+                duration: "4 часа",
+                enrolled: false
+            },
+            {
+                id: 2,
+                title: "Как эффективно учиться",
+                description: "Методики запоминания, техники концентрации и планирование времени для успешной учебы.",
+                category: "Саморазвитие",
+                icon: "📚",
+                duration: "2 часа",
+                enrolled: false
+            },
+            {
+                id: 3,
+                title: "Python для начинающих",
+                description: "Изучите основы программирования на Python. Практические задания и проекты.",
+                category: "Программирование",
+                icon: "🐍",
+                duration: "8 часов",
+                enrolled: false
+            },
+            {
+                id: 4,
+                title: "Нейросети в образовании",
+                description: "Как использовать ChatGPT и другие ИИ-инструменты в учебе и преподавании.",
+                category: "Искусственный интеллект",
+                icon: "🧠",
+                duration: "3 часа",
+                enrolled: false
+            },
+            {
+                id: 5,
+                title: "Создание тестов и опросов",
+                description: "Практическое руководство по созданию эффективных тестов для проверки знаний.",
+                category: "Педагогика",
+                icon: "📝",
+                duration: "2.5 часа",
+                enrolled: false
+            },
+            {
+                id: 6,
+                title: "Публичные выступления",
+                description: "Как уверенно выступать перед аудиторией и доносить свои мысли.",
+                category: "Саморазвитие",
+                icon: "🎤",
+                duration: "3 часа",
+                enrolled: false
+            }
+        ];
+        
+        let categories = ['Все', ...new Set(courses.map(c => c.category))];
+        let activeCategory = 'Все';
+        
+        function loadEnrolled() {
+            let enrolledIds = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+            courses.forEach(course => {
+                course.enrolled = enrolledIds.includes(course.id);
+            });
+        }
+        
+        function saveEnrolled() {
+            let enrolledIds = courses.filter(c => c.enrolled).map(c => c.id);
+            localStorage.setItem('enrolledCourses', JSON.stringify(enrolledIds));
+        }
+        
+        function renderFilters() {
+            const container = document.getElementById('categoryFilter');
+            container.innerHTML = categories.map(cat => `
+                <button class="filter-btn ${activeCategory === cat ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
+            `).join('');
+        }
+        
+        function setCategory(cat) {
+            activeCategory = cat;
+            renderFilters();
+            renderCourses();
+        }
+        
+        function toggleEnroll(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            if (course) {
+                course.enrolled = !course.enrolled;
+                saveEnrolled();
+                renderCourses();
+            }
+        }
+        
+        function renderCourses() {
+            const container = document.getElementById('coursesGrid');
+            let filtered = courses;
+            if (activeCategory !== 'Все') {
+                filtered = courses.filter(c => c.category === activeCategory);
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">Нет курсов в этой категории</p>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(course => `
+                <div class="course-card">
+                    <div class="course-image">${course.icon}</div>
+                    <div class="course-content">
+                        <span class="course-category">${course.category}</span>
+                        <h3 class="course-title">${course.title}</h3>
+                        <p class="course-description">${course.description}</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱ ${course.duration}</span>
+                            <button class="enroll-btn ${course.enrolled ? 'enrolled' : ''}" onclick="toggleEnroll(${course.id})">
+                                ${course.enrolled ? '✅ Записан' : '📖 Записаться'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        loadEnrolled();
+        renderFilters();
+        renderCourses();
+    </script>
+</body>
+</html>
