@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог — Instrumenty-AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
+    <style>
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .blog-card:hover {
+            transform: translateY(-5px);
+        }
+        .blog-image {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+        .blog-content {
+            padding: 1.5rem;
+        }
+        .blog-date {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .blog-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: #2c3e50;
+        }
+        .blog-excerpt {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        .read-more {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .read-more:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">📚 Instrumenty-AI</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="blog.html">Блог</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>📰 Блог об образовании и технологиях</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">Полезные статьи для студентов, преподавателей и всех, кто учится</p>
+        
+        <div class="blog-grid" id="blogGrid"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
+    </footer>
+
+    <script>
+        const articles = [
+            {
+                id: 1,
+                icon: "🤖",
+                date: "27 марта 2026",
+                title: "Как ИИ меняет образование",
+                excerpt: "Искусственный интеллект открывает новые возможности для персонализированного обучения. Рассказываем о главных трендах и инструментах.",
+                content: "Полный текст статьи..."
+            },
+            {
+                id: 2,
+                icon: "📚",
+                date: "25 марта 2026",
+                title: "5 методов эффективного обучения",
+                excerpt: "Научно доказанные техники, которые помогут учиться быстрее и запоминать больше информации.",
+                content: "Полный текст статьи..."
+            },
+            {
+                id: 3,
+                icon: "🎓",
+                date: "22 марта 2026",
+                title: "Подготовка к экзаменам: пошаговый план",
+                excerpt: "Как организовать подготовку, чтобы сдать экзамены на отлично без стресса и перегрузок.",
+                content: "Полный текст статьи..."
+            },
+            {
+                id: 4,
+                icon: "💻",
+                date: "20 марта 2026",
+                title: "Лучшие бесплатные образовательные ресурсы",
+                excerpt: "Подборка качественных сайтов, курсов и приложений для самообразования.",
+                content: "Полный текст статьи..."
+            },
+            {
+                id: 5,
+                icon: "🧠",
+                date: "18 марта 2026",
+                title: "Нейропластичность: как мозг учится",
+                excerpt: "Понимание работы мозга поможет сделать обучение более эффективным и осознанным.",
+                content: "Полный текст статьи..."
+            },
+            {
+                id: 6,
+                icon: "🎯",
+                date: "15 марта 2026",
+                title: "Как не прокрастинировать: рабочие техники",
+                excerpt: "Практические советы, которые помогут победить прокрастинацию и начать действовать.",
+                content: "Полный текст статьи..."
+            }
+        ];
+        
+        function renderBlog() {
+            const grid = document.getElementById('blogGrid');
+            grid.innerHTML = articles.map(article => `
+                <div class="blog-card">
+                    <div class="blog-image">${article.icon}</div>
+                    <div class="blog-content">
+                        <div class="blog-date">${article.date}</div>
+                        <h3 class="blog-title">${article.title}</h3>
+                        <p class="blog-excerpt">${article.excerpt}</p>
+                        <a href="blog-post.html?id=${article.id}" class="read-more">Читать далее →</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        renderBlog();
+    </script>
+</body>
+</html>
