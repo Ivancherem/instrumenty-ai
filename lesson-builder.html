@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор уроков — Instrumenty-AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
+    <style>
+        .builder-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .builder-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .builder-preview {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .lesson-section {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .preview-lesson {
+            margin-top: 1rem;
+        }
+        .preview-lesson h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 768px) {
+            .builder-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">📚 Instrumenty-AI</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="blog.html">Блог</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>📚 Конструктор уроков</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">Создавайте структурированные уроки за 5 минут</p>
+        
+        <div class="builder-container">
+            <div class="builder-form">
+                <h3>Создать урок</h3>
+                <div class="form-group">
+                    <label>Название урока</label>
+                    <input type="text" id="lessonTitle" placeholder="Введите название">
+                </div>
+                <div class="form-group">
+                    <label>Предмет</label>
+                    <input type="text" id="lessonSubject" placeholder="Например: Математика, Физика, История">
+                </div>
+                <div class="form-group">
+                    <label>Цели урока</label>
+                    <textarea id="lessonGoals" rows="3" placeholder="Чему научатся ученики?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Содержание</label>
+                    <textarea id="lessonContent" rows="5" placeholder="Основной материал урока..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Задания для проверки</label>
+                    <textarea id="lessonTasks" rows="3" placeholder="Вопросы или задания для учеников"></textarea>
+                </div>
+                <button class="btn" onclick="previewLesson()" style="width: 100%;">Предпросмотр урока</button>
+            </div>
+            
+            <div class="builder-preview">
+                <h3>Предпросмотр</h3>
+                <div id="preview" class="preview-lesson"></div>
+                <button class="btn" onclick="saveLesson()" style="width: 100%; margin-top: 1rem;">💾 Сохранить урок</button>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <h3>📖 Сохраненные уроки</h3>
+            <div id="savedLessons"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
+    </footer>
+
+    <script>
+        let savedLessons = JSON.parse(localStorage.getItem('lessons') || '[]');
+        
+        function previewLesson() {
+            const title = document.getElementById('lessonTitle').value || 'Название урока';
+            const subject = document.getElementById('lessonSubject').value || 'Предмет не указан';
+            const goals = document.getElementById('lessonGoals').value || 'Цели не указаны';
+            const content = document.getElementById('lessonContent').value || 'Содержание не указано';
+            const tasks = document.getElementById('lessonTasks').value || 'Задания не указаны';
+            
+            const previewDiv = document.getElementById('preview');
+            previewDiv.innerHTML = `
+                <div class="lesson-section">
+                    <div class="section-title">📖 ${escapeHtml(title)}</div>
+                    <div>Предмет: ${escapeHtml(subject)}</div>
+                </div>
+                <div class="lesson-section">
+                    <div class="section-title">🎯 Цели урока</div>
+                    <div>${escapeHtml(goals).replace(/\n/g, '<br>')}</div>
+                </div>
+                <div class="lesson-section">
+                    <div class="section-title">📚 Содержание</div>
+                    <div>${escapeHtml(content).replace(/\n/g, '<br>')}</div>
+                </div>
+                <div class="lesson-section">
+                    <div class="section-title">✏️ Задания</div>
+                    <div>${escapeHtml(tasks).replace(/\n/g, '<br>')}</div>
+                </div>
+            `;
+        }
+        
+        function saveLesson() {
+            const title = document.getElementById('lessonTitle').value;
+            if (!title) {
+                alert('Введите название урока');
+                return;
+            }
+            
+            const lesson = {
+                id: Date.now(),
+                title: title,
+                subject: document.getElementById('lessonSubject').value,
+                goals: document.getElementById('lessonGoals').value,
+                content: document.getElementById('lessonContent').value,
+                tasks: document.getElementById('lessonTasks').value,
+                date: new Date().toLocaleDateString('ru-RU')
+            };
+            
+            savedLessons.push(lesson);
+            localStorage.setItem('lessons', JSON.stringify(savedLessons));
+            renderSavedLessons();
+            alert('Урок сохранен!');
+            
+            // Очистка формы
+            document.getElementById('lessonTitle').value = '';
+            document.getElementById('lessonSubject').value = '';
+            document.getElementById('lessonGoals').value = '';
+            document.getElementById('lessonContent').value = '';
+            document.getElementById('lessonTasks').value = '';
+            document.getElementById('preview').innerHTML = '';
+        }
+        
+        function renderSavedLessons() {
+            const container = document.getElementById('savedLessons');
+            if (savedLessons.length === 0) {
+                container.innerHTML = '<p>Нет сохраненных уроков</p>';
+                return;
+            }
+            
+            container.innerHTML = savedLessons.map(lesson => `
+                <div class="lesson-section" style="margin-bottom: 1rem;">
+                    <div class="section-title">📖 ${escapeHtml(lesson.title)}</div>
+                    <div>Предмет: ${escapeHtml(lesson.subject)}</div>
+                    <div>Создан: ${lesson.date}</div>
+                    <button class="btn" onclick="viewLesson(${lesson.id})" style="margin-top: 0.5rem;">Просмотреть</button>
+                    <button class="delete-btn" onclick="deleteLesson(${lesson.id})">Удалить</button>
+                </div>
+            `).join('');
+        }
+        
+        function viewLesson(id) {
+            const lesson = savedLessons.find(l => l.id === id);
+            if (lesson) {
+                document.getElementById('lessonTitle').value = lesson.title;
+                document.getElementById('lessonSubject').value = lesson.subject;
+                document.getElementById('lessonGoals').value = lesson.goals;
+                document.getElementById('lessonContent').value = lesson.content;
+                document.getElementById('lessonTasks').value = lesson.tasks;
+                previewLesson();
+            }
+        }
+        
+        function deleteLesson(id) {
+            if (confirm('Удалить урок?')) {
+                savedLessons = savedLessons.filter(l => l.id !== id);
+                localStorage.setItem('lessons', JSON.stringify(savedLessons));
+                renderSavedLessons();
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        renderSavedLessons();
+    </script>
+</body>
+</html>
