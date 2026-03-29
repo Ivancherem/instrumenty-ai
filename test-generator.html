@@ -1,1 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор тестов — Instrumenty-AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
+    <style>
+        .test-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .mode-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 1rem;
+            background: #ecf0f1;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .mode-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        .question-form {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+        .question-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .answer-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .answer-input input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .correct-badge {
+            background: #27ae60;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+        .question-preview {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #e0e0e0;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .answer-option {
+            padding: 0.5rem;
+            margin: 0.3rem 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .answer-option:hover {
+            background: #e8e8e8;
+        }
+        .answer-option.selected {
+            background: #3498db;
+            color: white;
+        }
+        .result {
+            text-align: center;
+            padding: 2rem;
+            background: #f0f7ff;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+        .save-btn, .create-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+            margin-right: 0.5rem;
+        }
+        .save-btn:hover, .create-btn:hover {
+            background: #2980b9;
+        }
+        .test-list {
+            margin-top: 1rem;
+        }
+        .test-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">📚 Instrumenty-AI</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="blog.html">Блог</a></li>
+                <li><a href="courses.html">Курсы</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
 
+    <main>
+        <h1>📝 Генератор тестов</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">Создавайте тесты и проверяйте знания</p>
+        
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="setMode('create')">➕ Создать тест</button>
+            <button class="mode-btn" onclick="setMode('take')">📋 Пройти тест</button>
+            <button class="mode-btn" onclick="setMode('manage')">📁 Мои тесты</button>
+        </div>
+        
+        <!-- Режим создания теста -->
+        <div id="createMode" class="test-container">
+            <h2>Создание нового теста</h2>
+            <input type="text" id="testTitle" class="question-input" placeholder="Название теста">
+            <div id="questionsContainer"></div>
+            <button class="create-btn" onclick="addQuestion()">+ Добавить вопрос</button>
+            <button class="save-btn" onclick="saveTest()">💾 Сохранить тест</button>
+        </div>
+        
+        <!-- Режим прохождения теста -->
+        <div id="takeMode" class="test-container" style="display: none;">
+            <h2>Выберите тест</h2>
+            <select id="testSelect" class="question-input" onchange="loadTestToTake()">
+                <option value="">-- Выберите тест --</option>
+            </select>
+            <div id="takeQuestions"></div>
+            <button class="save-btn" onclick="submitTest()" style="display: none;" id="submitBtn">📊 Проверить результаты</button>
+            <div id="testResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <!-- Режим управления тестами -->
+        <div id="manageMode" class="test-container" style="display: none;">
+            <h2>Мои тесты</h2>
+            <div id="testsList"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
+    </footer>
+
+    <script>
+        let questions = [];
+        let currentMode = 'create';
+        let currentAnswers = [];
+        let currentTestId = null;
+        let tests = JSON.parse(localStorage.getItem('generatorTests') || '[]');
+        
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'create') {
+                document.querySelector('.mode-btn:first-child').classList.add('active');
+                document.getElementById('createMode').style.display = 'block';
+                document.getElementById('takeMode').style.display = 'none';
+                document.getElementById('manageMode').style.display = 'none';
+            } else if (mode === 'take') {
+                document.querySelector('.mode-btn:nth-child(2)').classList.add('active');
+                document.getElementById('createMode').style.display = 'none';
+                document.getElementById('takeMode').style.display = 'block';
+                document.getElementById('manageMode').style.display = 'none';
+                loadTestList();
+            } else {
+                document.querySelector('.mode-btn:nth-child(3)').classList.add('active');
+                document.getElementById('createMode').style.display = 'none';
+                document.getElementById('takeMode').style.display = 'none';
+                document.getElementById('manageMode').style.display = 'block';
+                renderTestsList();
+            }
+        }
+        
+        function addQuestion() {
+            questions.push({
+                text: '',
+                answers: ['', ''],
+                correct: 0
+            });
+            renderQuestions();
+        }
+        
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            questions.forEach((q, idx) => {
+                const div = document.createElement('div');
+                div.className = 'question-form';
+                div.innerHTML = `
+                    <h3>Вопрос ${idx + 1}</h3>
+                    <input type="text" class="question-input" placeholder="Введите вопрос" value="${escapeHtml(q.text)}" onchange="updateQuestion(${idx}, 'text', this.value)">
+                    <div id="answers-${idx}"></div>
+                    <button class="create-btn" onclick="addAnswer(${idx})" style="margin-top: 0.5rem; padding: 0.5rem;">+ Добавить вариант ответа</button>
+                    <button class="delete-btn" onclick="removeQuestion(${idx})">Удалить вопрос</button>
+                `;
+                container.appendChild(div);
+                renderAnswers(idx);
+            });
+        }
+        
+        function renderAnswers(qIdx) {
+            const answersContainer = document.getElementById(`answers-${qIdx}`);
+            if (!answersContainer) return;
+            answersContainer.innerHTML = '';
+            questions[qIdx].answers.forEach((ans, ansIdx) => {
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'answer-input';
+                answerDiv.innerHTML = `
+                    <input type="text" placeholder="Вариант ответа ${ansIdx + 1}" value="${escapeHtml(ans)}" onchange="updateAnswer(${qIdx}, ${ansIdx}, this.value)">
+                    <input type="radio" name="correct-${qIdx}" value="${ansIdx}" ${questions[qIdx].correct === ansIdx ? 'checked' : ''} onchange="setCorrect(${qIdx}, ${ansIdx})">
+                    <label>Правильный</label>
+                    <button class="delete-btn" onclick="removeAnswer(${qIdx}, ${ansIdx})">✖</button>
+                `;
+                answersContainer.appendChild(answerDiv);
+            });
+        }
+        
+        function updateQuestion(qIdx, field, value) {
+            questions[qIdx][field] = value;
+        }
+        
+        function updateAnswer(qIdx, aIdx, value) {
+            questions[qIdx].answers[aIdx] = value;
+        }
+        
+        function setCorrect(qIdx, aIdx) {
+            questions[qIdx].correct = aIdx;
+            renderAnswers(qIdx);
+        }
+        
+        function addAnswer(qIdx) {
+            questions[qIdx].answers.push('');
+            renderAnswers(qIdx);
+        }
+        
+        function removeAnswer(qIdx, aIdx) {
+            questions[qIdx].answers.splice(aIdx, 1);
+            if (questions[qIdx].correct >= questions[qIdx].answers.length) {
+                questions[qIdx].correct = 0;
+            }
+            renderAnswers(qIdx);
+        }
+        
+        function removeQuestion(qIdx) {
+            questions.splice(qIdx, 1);
+            renderQuestions();
+        }
+        
+        function saveTest() {
+            const title = document.getElementById('testTitle').value.trim();
+            if (!title) {
+                alert('Введите название теста');
+                return;
+            }
+            if (questions.length === 0) {
+                alert('Добавьте хотя бы один вопрос');
+                return;
+            }
+            for (let i = 0; i < questions.length; i++) {
+                if (!questions[i].text.trim()) {
+                    alert(`Введите текст вопроса ${i + 1}`);
+                    return;
+                }
+                for (let j = 0; j < questions[i].answers.length; j++) {
+                    if (!questions[i].answers[j].trim()) {
+                        alert(`Вопрос ${i + 1}: заполните вариант ответа ${j + 1}`);
+                        return;
+                    }
+                }
+            }
+            
+            const newTest = {
+                id: Date.now(),
+                title: title,
+                questions: JSON.parse(JSON.stringify(questions))
+            };
+            tests.push(newTest);
+            localStorage.setItem('generatorTests', JSON.stringify(tests));
+            alert('Тест сохранен!');
+            
+            questions = [];
+            document.getElementById('testTitle').value = '';
+            renderQuestions();
+        }
+        
+        function loadTestList() {
+            const select = document.getElementById('testSelect');
+            select.innerHTML = '<option value="">-- Выберите тест --</option>';
+            tests.forEach(test => {
+                select.innerHTML += `<option value="${test.id}">${escapeHtml(test.title)}</option>`;
+            });
+        }
+        
+        function loadTestToTake() {
+            const testId = document.getElementById('testSelect').value;
+            if (!testId) return;
+            currentTestId = parseInt(testId);
+            const test = tests.find(t => t.id === currentTestId);
+            if (!test) return;
+            
+            const container = document.getElementById('takeQuestions');
+            container.innerHTML = `<h3>${escapeHtml(test.title)}</h3>`;
+            currentAnswers = [];
+            
+            test.questions.forEach((q, idx) => {
+                currentAnswers.push(null);
+                const div = document.createElement('div');
+                div.className = 'question-preview';
+                div.innerHTML = `
+                    <div class="question-text">${idx + 1}. ${escapeHtml(q.text)}</div>
+                    <div id="take-q-${idx}"></div>
+                `;
+                container.appendChild(div);
+                
+                const answersDiv = document.getElementById(`take-q-${idx}`);
+                q.answers.forEach((ans, ansIdx) => {
+                    const answerDiv = document.createElement('div');
+                    answerDiv.className = 'answer-option';
+                    answerDiv.innerHTML = escapeHtml(ans);
+                    answerDiv.onclick = () => selectTakeAnswer(idx, ansIdx);
+                    answersDiv.appendChild(answerDiv);
+                });
+            });
+            document.getElementById('submitBtn').style.display = 'block';
+            document.getElementById('testResult').style.display = 'none';
+        }
+        
+        function selectTakeAnswer(qIdx, aIdx) {
+            currentAnswers[qIdx] = aIdx;
+            const answersDiv = document.getElementById(`take-q-${qIdx}`);
+            const options = answersDiv.children;
+            for (let i = 0; i < options.length; i++) {
+                options[i].classList.remove('selected');
+            }
+            options[aIdx].classList.add('selected');
+        }
+        
+        function submitTest() {
+            const test = tests.find(t => t.id === currentTestId);
+            if (!test) return;
+            let correct = 0;
+            test.questions.forEach((q, idx) => {
+                if (currentAnswers[idx] === q.correct) correct++;
+            });
+            const score = Math.round((correct / test.questions.length) * 100);
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div class="score">${score}%</div>
+                <p>Правильных ответов: ${correct} из ${test.questions.length}</p>
+                ${score >= 70 ? '<p>🎉 Отличный результат! Поздравляем!</p>' : '<p>📚 Попробуйте пройти тест еще раз!</p>'}
+                <button class="btn" onclick="resetTest()">Пройти заново</button>
+            `;
+        }
+        
+        function resetTest() {
+            loadTestToTake();
+        }
+        
+        function renderTestsList() {
+            const container = document.getElementById('testsList');
+            if (tests.length === 0) {
+                container.innerHTML = '<p>У вас пока нет сохраненных тестов</p>';
+                return;
+            }
+            container.innerHTML = tests.map(test => `
+                <div class="test-item">
+                    <span><strong>${escapeHtml(test.title)}</strong> (${test.questions.length} вопросов)</span>
+                    <div>
+                        <button class="btn" onclick="deleteTest(${test.id})" style="background:#e74c3c; margin-right:0.5rem;">Удалить</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function deleteTest(id) {
+            if (confirm('Удалить этот тест?')) {
+                tests = tests.filter(t => t.id !== id);
+                localStorage.setItem('generatorTests', JSON.stringify(tests));
+                renderTestsList();
+                loadTestList();
+            }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Инициализация
+        renderQuestions();
+    </script>
+</body>
+</html>
