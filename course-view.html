@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр курса — Instrumenty-AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
+    <style>
+        .course-player {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .video-placeholder {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            flex-direction: column;
+        }
+        .video-placeholder .play-icon {
+            font-size: 5rem;
+            background: rgba(255,255,255,0.2);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        .course-info {
+            padding: 2rem;
+        }
+        .course-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        .lessons-list {
+            margin-top: 2rem;
+        }
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .lesson-item:hover {
+            background: #f8f9fa;
+        }
+        .lesson-item.completed {
+            opacity: 0.6;
+        }
+        .lesson-number {
+            width: 35px;
+            height: 35px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .lesson-item.completed .lesson-number {
+            background: #27ae60;
+        }
+        .lesson-title {
+            flex: 1;
+            font-weight: bold;
+        }
+        .lesson-duration {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        .complete-badge {
+            color: #27ae60;
+            font-size: 1.2rem;
+        }
+        .progress-bar {
+            background: #ecf0f1;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        .progress-fill {
+            background: #3498db;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">📚 Instrumenty-AI</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="blog.html">Блог</a></li>
+                <li><a href="courses.html">Курсы</a></li>
+                <li><a href="my-courses.html">Мои курсы</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <a href="my-courses.html" class="back-link">← Вернуться к моим курсам</a>
+        
+        <div class="course-player">
+            <div class="video-placeholder">
+                <div class="play-icon">🎬</div>
+                <h2>Видео-урок</h2>
+                <p>Здесь будет видео-материал курса</p>
+            </div>
+            <div class="course-info">
+                <h1 class="course-title" id="courseTitle">Загрузка...</h1>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="progressText">Прогресс: 0%</p>
+                <div class="lessons-list" id="lessonsList"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
+    </footer>
+
+    <script>
+        // Данные курсов с уроками
+        const courseLessons = {
+            1: {
+                title: "Введение в искусственный интеллект",
+                lessons: [
+                    { id: 1, title: "Что такое искусственный интеллект?", duration: "15 мин" },
+                    { id: 2, title: "История развития ИИ", duration: "20 мин" },
+                    { id: 3, title: "Основные направления ИИ", duration: "25 мин" },
+                    { id: 4, title: "Нейросети и глубокое обучение", duration: "30 мин" },
+                    { id: 5, title: "Практическое применение ИИ", duration: "20 мин" }
+                ]
+            },
+            2: {
+                title: "Как эффективно учиться",
+                lessons: [
+                    { id: 1, title: "Научные основы обучения", duration: "15 мин" },
+                    { id: 2, title: "Метод активного повторения", duration: "20 мин" },
+                    { id: 3, title: "Техника Помодоро", duration: "15 мин" },
+                    { id: 4, title: "Интервальное повторение", duration: "25 мин" },
+                    { id: 5, title: "Создание конспектов", duration: "20 мин" }
+                ]
+            },
+            3: {
+                title: "Python для начинающих",
+                lessons: [
+                    { id: 1, title: "Установка Python и первый код", duration: "20 мин" },
+                    { id: 2, title: "Переменные и типы данных", duration: "25 мин" },
+                    { id: 3, title: "Условные операторы", duration: "30 мин" },
+                    { id: 4, title: "Циклы и функции", duration: "35 мин" },
+                    { id: 5, title: "Практический проект", duration: "40 мин" }
+                ]
+            },
+            4: {
+                title: "Нейросети в образовании",
+                lessons: [
+                    { id: 1, title: "Что такое нейросети", duration: "20 мин" },
+                    { id: 2, title: "ChatGPT в учебе", duration: "25 мин" },
+                    { id: 3, title: "Генерация заданий", duration: "25 мин" },
+                    { id: 4, title: "Проверка работ с ИИ", duration: "30 мин" },
+                    { id: 5, title: "Этика использования ИИ", duration: "20 мин" }
+                ]
+            },
+            5: {
+                title: "Создание тестов и опросов",
+                lessons: [
+                    { id: 1, title: "Типы тестовых заданий", duration: "15 мин" },
+                    { id: 2, title: "Правила составления вопросов", duration: "20 мин" },
+                    { id: 3, title: "Оценка результатов", duration: "20 мин" },
+                    { id: 4, title: "Инструменты для создания", duration: "25 мин" },
+                    { id: 5, title: "Практическая работа", duration: "30 мин" }
+                ]
+            },
+            6: {
+                title: "Публичные выступления",
+                lessons: [
+                    { id: 1, title: "Подготовка к выступлению", duration: "20 мин" },
+                    { id: 2, title: "Структура речи", duration: "25 мин" },
+                    { id: 3, title: "Работа с голосом", duration: "20 мин" },
+                    { id: 4, title: "Язык тела", duration: "20 мин" },
+                    { id: 5, title: "Работа с залом", duration: "25 мин" }
+                ]
+            }
+        };
+
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function loadCourse() {
+            const courseId = getUrlParam('id');
+            const course = courseLessons[courseId];
+            
+            if (!course) {
+                document.querySelector('.course-info').innerHTML = '<p>Курс не найден</p>';
+                return;
+            }
+            
+            document.getElementById('courseTitle').textContent = course.title;
+            
+            // Загружаем прогресс
+            let progress = JSON.parse(localStorage.getItem(`course_progress_${courseId}`) || '[]');
+            
+            renderLessons(courseId, course.lessons, progress);
+        }
+        
+        function renderLessons(courseId, lessons, completedLessons) {
+            const container = document.getElementById('lessonsList');
+            const completedCount = completedLessons.length;
+            const totalCount = lessons.length;
+            const percent = Math.round((completedCount / totalCount) * 100);
+            
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('progressText').innerHTML = `Прогресс: ${completedCount} из ${totalCount} уроков (${percent}%)`;
+            
+            container.innerHTML = lessons.map((lesson, idx) => {
+                const isCompleted = completedLessons.includes(lesson.id);
+                return `
+                    <div class="lesson-item ${isCompleted ? 'completed' : ''}" onclick="toggleLesson(${courseId}, ${lesson.id}, ${idx})">
+                        <div class="lesson-number">${idx + 1}</div>
+                        <div class="lesson-title">${lesson.title}</div>
+                        <div class="lesson-duration">${lesson.duration}</div>
+                        ${isCompleted ? '<div class="complete-badge">✅</div>' : '<button class="btn" style="padding: 0.3rem 0.8rem;">Просмотреть</button>'}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function toggleLesson(courseId, lessonId, idx) {
+            let progress = JSON.parse(localStorage.getItem(`course_progress_${courseId}`) || '[]');
+            
+            if (progress.includes(lessonId)) {
+                // Если уже пройден, можно убрать (опционально)
+                if (confirm('Отметить урок как непройденный?')) {
+                    progress = progress.filter(id => id !== lessonId);
+                }
+            } else {
+                // Отмечаем как пройденный
+                alert(`✅ Урок ${idx + 1} пройден!`);
+                progress.push(lessonId);
+            }
+            
+            localStorage.setItem(`course_progress_${courseId}`, JSON.stringify(progress));
+            
+            // Обновляем отображение
+            const course = courseLessons[courseId];
+            renderLessons(courseId, course.lessons, progress);
+        }
+        
+        loadCourse();
+    </script>
+</body>
+</html>
