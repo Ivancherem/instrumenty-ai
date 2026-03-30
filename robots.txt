@@ -1,0 +1,29 @@
+# robots.txt для instrumenty-ai.ru
+# Инструкции для поисковых роботов
+
+User-agent: *
+Allow: /
+
+# Запрещаем индексировать служебные страницы
+Disallow: /css/
+Disallow: /images/
+Disallow: /js/
+
+# Основные страницы для индексации
+Sitemap: https://instrumenty-ai.ru/sitemap.xml
+
+# Задержка между запросами (для уважения к серверу)
+Crawl-delay: 1
+
+# Правила для разных поисковых систем
+User-agent: Yandex
+Allow: /
+Crawl-delay: 2
+
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
