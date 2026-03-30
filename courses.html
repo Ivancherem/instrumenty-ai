@@ -128,14 +128,13 @@
     </footer>
 
     <script>
-        // Список курсов
         let courses = [
-            { id: 1, title: "Введение в искусственный интеллект", description: "Узнайте основы ИИ, машинного обучения и нейросетей. Практические примеры и простые объяснения.", category: "Искусственный интеллект", icon: "🤖", duration: "4 часа", enrolled: false },
-            { id: 2, title: "Как эффективно учиться", description: "Методики запоминания, техники концентрации и планирование времени для успешной учебы.", category: "Саморазвитие", icon: "📚", duration: "2 часа", enrolled: false },
-            { id: 3, title: "Python для начинающих", description: "Изучите основы программирования на Python. Практические задания и проекты.", category: "Программирование", icon: "🐍", duration: "8 часов", enrolled: false },
-            { id: 4, title: "Нейросети в образовании", description: "Как использовать ChatGPT и другие ИИ-инструменты в учебе и преподавании.", category: "Искусственный интеллект", icon: "🧠", duration: "3 часа", enrolled: false },
-            { id: 5, title: "Создание тестов и опросов", description: "Практическое руководство по созданию эффективных тестов для проверки знаний.", category: "Педагогика", icon: "📝", duration: "2.5 часа", enrolled: false },
-            { id: 6, title: "Публичные выступления", description: "Как уверенно выступать перед аудиторией и доносить свои мысли.", category: "Саморазвитие", icon: "🎤", duration: "3 часа", enrolled: false }
+            { id: 1, title: "Введение в искусственный интеллект", description: "Узнайте основы ИИ, машинного обучения и нейросетей.", category: "Искусственный интеллект", icon: "🤖", duration: "4 часа", enrolled: false },
+            { id: 2, title: "Как эффективно учиться", description: "Методики запоминания, техники концентрации.", category: "Саморазвитие", icon: "📚", duration: "2 часа", enrolled: false },
+            { id: 3, title: "Python для начинающих", description: "Изучите основы программирования на Python.", category: "Программирование", icon: "🐍", duration: "8 часов", enrolled: false },
+            { id: 4, title: "Нейросети в образовании", description: "Как использовать ChatGPT и другие ИИ-инструменты.", category: "Искусственный интеллект", icon: "🧠", duration: "3 часа", enrolled: false },
+            { id: 5, title: "Создание тестов и опросов", description: "Практическое руководство по созданию эффективных тестов.", category: "Педагогика", icon: "📝", duration: "2.5 часа", enrolled: false },
+            { id: 6, title: "Публичные выступления", description: "Как уверенно выступать перед аудиторией.", category: "Саморазвитие", icon: "🎤", duration: "3 часа", enrolled: false }
         ];
         
         let categories = ['Все', ...new Set(courses.map(c => c.category))];
