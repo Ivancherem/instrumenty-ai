@@ -30,6 +30,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
+            margin: 2rem 0;
         }
         .course-card {
             background: white;
@@ -43,7 +44,7 @@
         }
         .course-image {
             background: linear-gradient(135deg, #3498db, #2c3e50);
-            height: 160px;
+            height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -91,10 +92,7 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        .enroll-btn:hover {
-            background: #2980b9;
-        }
-        .enrolled {
+        .enroll-btn.enrolled {
             background: #27ae60;
         }
     </style>
@@ -130,61 +128,14 @@
     </footer>
 
     <script>
+        // Список курсов
         let courses = [
-            {
-                id: 1,
-                title: "Введение в искусственный интеллект",
-                description: "Узнайте основы ИИ, машинного обучения и нейросетей. Практические примеры и простые объяснения.",
-                category: "Искусственный интеллект",
-                icon: "🤖",
-                duration: "4 часа",
-                enrolled: false
-            },
-            {
-                id: 2,
-                title: "Как эффективно учиться",
-                description: "Методики запоминания, техники концентрации и планирование времени для успешной учебы.",
-                category: "Саморазвитие",
-                icon: "📚",
-                duration: "2 часа",
-                enrolled: false
-            },
-            {
-                id: 3,
-                title: "Python для начинающих",
-                description: "Изучите основы программирования на Python. Практические задания и проекты.",
-                category: "Программирование",
-                icon: "🐍",
-                duration: "8 часов",
-                enrolled: false
-            },
-            {
-                id: 4,
-                title: "Нейросети в образовании",
-                description: "Как использовать ChatGPT и другие ИИ-инструменты в учебе и преподавании.",
-                category: "Искусственный интеллект",
-                icon: "🧠",
-                duration: "3 часа",
-                enrolled: false
-            },
-            {
-                id: 5,
-                title: "Создание тестов и опросов",
-                description: "Практическое руководство по созданию эффективных тестов для проверки знаний.",
-                category: "Педагогика",
-                icon: "📝",
-                duration: "2.5 часа",
-                enrolled: false
-            },
-            {
-                id: 6,
-                title: "Публичные выступления",
-                description: "Как уверенно выступать перед аудиторией и доносить свои мысли.",
-                category: "Саморазвитие",
-                icon: "🎤",
-                duration: "3 часа",
-                enrolled: false
-            }
+            { id: 1, title: "Введение в искусственный интеллект", description: "Узнайте основы ИИ, машинного обучения и нейросетей. Практические примеры и простые объяснения.", category: "Искусственный интеллект", icon: "🤖", duration: "4 часа", enrolled: false },
+            { id: 2, title: "Как эффективно учиться", description: "Методики запоминания, техники концентрации и планирование времени для успешной учебы.", category: "Саморазвитие", icon: "📚", duration: "2 часа", enrolled: false },
+            { id: 3, title: "Python для начинающих", description: "Изучите основы программирования на Python. Практические задания и проекты.", category: "Программирование", icon: "🐍", duration: "8 часов", enrolled: false },
+            { id: 4, title: "Нейросети в образовании", description: "Как использовать ChatGPT и другие ИИ-инструменты в учебе и преподавании.", category: "Искусственный интеллект", icon: "🧠", duration: "3 часа", enrolled: false },
+            { id: 5, title: "Создание тестов и опросов", description: "Практическое руководство по созданию эффективных тестов для проверки знаний.", category: "Педагогика", icon: "📝", duration: "2.5 часа", enrolled: false },
+            { id: 6, title: "Публичные выступления", description: "Как уверенно выступать перед аудиторией и доносить свои мысли.", category: "Саморазвитие", icon: "🎤", duration: "3 часа", enrolled: false }
         ];
         
         let categories = ['Все', ...new Set(courses.map(c => c.category))];
@@ -215,21 +166,32 @@
             renderCourses();
         }
         
-       function toggleEnroll(courseId) {
-    const course = courses.find(c => c.id === courseId);
-    if (course) {
-        course.enrolled = !course.enrolled;
-        saveEnrolled();
-        renderCourses();
-        
-        // Уведомление
-        if (course.enrolled) {
-            alert(`✅ Вы записались на курс "${course.title}"! Перейдите в "Мои курсы" для просмотра.`);
-        } else {
-            alert(`❌ Вы отписались от курса "${course.title}".`);
+        function toggleEnroll(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            if (course) {
+                course.enrolled = !course.enrolled;
+                saveEnrolled();
+                renderCourses();
+                
+                if (course.enrolled) {
+                    alert(`✅ Вы записались на курс "${course.title}"! Перейдите в "Мои курсы" для просмотра.`);
+                } else {
+                    alert(`❌ Вы отписались от курса "${course.title}".`);
+                }
+            }
         }
-    }
-}
+        
+        function renderCourses() {
+            const container = document.getElementById('coursesGrid');
+            let filtered = courses;
+            if (activeCategory !== 'Все') {
+                filtered = courses.filter(c => c.category === activeCategory);
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">Нет курсов в этой категории</p>';
+                return;
+            }
             
             container.innerHTML = filtered.map(course => `
                 <div class="course-card">
