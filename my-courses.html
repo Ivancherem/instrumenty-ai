@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои курсы — Instrumenty-AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
+    <style>
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+        .course-image {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .course-content {
+            padding: 1.5rem;
+        }
+        .course-category {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #3498db;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        .course-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        .course-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        .course-duration {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            background: white;
+            border-radius: 20px;
+        }
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">📚 Instrumenty-AI</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="blog.html">Блог</a></li>
+                <li><a href="courses.html">Курсы</a></li>
+                <li><a href="my-courses.html">Мои курсы</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>📖 Мои курсы</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">Курсы, на которые вы записались</p>
+        
+        <div id="coursesContainer"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
+    </footer>
+
+    <script>
+        // Список всех курсов (такой же как в courses.html)
+        const allCourses = [
+            { id: 1, title: "Введение в искусственный интеллект", description: "Узнайте основы ИИ, машинного обучения и нейросетей.", category: "Искусственный интеллект", icon: "🤖", duration: "4 часа" },
+            { id: 2, title: "Как эффективно учиться", description: "Методики запоминания, техники концентрации.", category: "Саморазвитие", icon: "📚", duration: "2 часа" },
+            { id: 3, title: "Python для начинающих", description: "Изучите основы программирования на Python.", category: "Программирование", icon: "🐍", duration: "8 часов" },
+            { id: 4, title: "Нейросети в образовании", description: "Как использовать ChatGPT и другие ИИ-инструменты.", category: "Искусственный интеллект", icon: "🧠", duration: "3 часа" },
+            { id: 5, title: "Создание тестов и опросов", description: "Практическое руководство по созданию эффективных тестов.", category: "Педагогика", icon: "📝", duration: "2.5 часа" },
+            { id: 6, title: "Публичные выступления", description: "Как уверенно выступать перед аудиторией.", category: "Саморазвитие", icon: "🎤", duration: "3 часа" }
+        ];
+
+        function getEnrolledCourses() {
+            return JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+        }
+
+        function renderCourses() {
+            const enrolledIds = getEnrolledCourses();
+            const enrolledCourses = allCourses.filter(course => enrolledIds.includes(course.id));
+            const container = document.getElementById('coursesContainer');
+            
+            if (enrolledCourses.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📚</div>
+                        <h3>У вас пока нет записанных курсов</h3>
+                        <p>Перейдите на <a href="courses.html" style="color: #3498db;">страницу курсов</a> и запишитесь на обучение!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="courses-grid">
+                    ${enrolledCourses.map(course => `
+                        <div class="course-card">
+                            <div class="course-image">${course.icon}</div>
+                            <div class="course-content">
+                                <span class="course-category">${course.category}</span>
+                                <h3 class="course-title">${course.title}</h3>
+                                <p class="course-description">${course.description}</p>
+                                <div class="course-meta">
+                                    <span class="course-duration">⏱ ${course.duration}</span>
+                                    <button class="btn" onclick="unenroll(${course.id})" style="background: #e74c3c;">Отписаться</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        function unenroll(courseId) {
+            if (confirm('Отписаться от этого курса?')) {
+                let enrolled = getEnrolledCourses();
+                enrolled = enrolled.filter(id => id !== courseId);
+                localStorage.setItem('enrolledCourses', JSON.stringify(enrolled));
+                renderCourses();
+            }
+        }
+        
+        renderCourses();
+    </script>
+</body>
+</html>
