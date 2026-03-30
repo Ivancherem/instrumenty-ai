@@ -14,26 +14,19 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
         }
-        .video-placeholder {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            flex-direction: column;
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            background: #000;
         }
-        .video-placeholder .play-icon {
-            font-size: 5rem;
-            background: rgba(255,255,255,0.2);
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
         .course-info {
             padding: 2rem;
@@ -58,8 +51,12 @@
         .lesson-item:hover {
             background: #f8f9fa;
         }
+        .lesson-item.active {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+        }
         .lesson-item.completed {
-            opacity: 0.6;
+            opacity: 0.7;
         }
         .lesson-number {
             width: 35px;
@@ -71,6 +68,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            flex-shrink: 0;
         }
         .lesson-item.completed .lesson-number {
             background: #27ae60;
@@ -106,6 +104,18 @@
             color: #3498db;
             text-decoration: none;
         }
+        .watch-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .watch-btn.completed {
+            background: #95a5a6;
+        }
     </style>
 </head>
 <body>
@@ -130,13 +140,11 @@
         <a href="my-courses.html" class="back-link">← Вернуться к моим курсам</a>
         
         <div class="course-player">
-            <div class="video-placeholder">
-                <div class="play-icon">🎬</div>
-                <h2>Видео-урок</h2>
-                <p>Здесь будет видео-материал курса</p>
+            <div class="video-container" id="videoContainer">
+                <iframe id="videoFrame" src="https://www.youtube.com/embed/2ePf9rue2oA" frameborder="0" allowfullscreen></iframe>
             </div>
             <div class="course-info">
-                <h1 class="course-title" id="courseTitle">Загрузка...</h1>
+                <h1 class="course-title" id="courseTitle">Введение в искусственный интеллект</h1>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
@@ -151,136 +159,139 @@
     </footer>
 
     <script>
-        // Данные курсов с уроками
-        const courseLessons = {
-            1: {
-                title: "Введение в искусственный интеллект",
-                lessons: [
-                    { id: 1, title: "Что такое искусственный интеллект?", duration: "15 мин" },
-                    { id: 2, title: "История развития ИИ", duration: "20 мин" },
-                    { id: 3, title: "Основные направления ИИ", duration: "25 мин" },
-                    { id: 4, title: "Нейросети и глубокое обучение", duration: "30 мин" },
-                    { id: 5, title: "Практическое применение ИИ", duration: "20 мин" }
-                ]
-            },
-            2: {
-                title: "Как эффективно учиться",
-                lessons: [
-                    { id: 1, title: "Научные основы обучения", duration: "15 мин" },
-                    { id: 2, title: "Метод активного повторения", duration: "20 мин" },
-                    { id: 3, title: "Техника Помодоро", duration: "15 мин" },
-                    { id: 4, title: "Интервальное повторение", duration: "25 мин" },
-                    { id: 5, title: "Создание конспектов", duration: "20 мин" }
-                ]
-            },
-            3: {
-                title: "Python для начинающих",
-                lessons: [
-                    { id: 1, title: "Установка Python и первый код", duration: "20 мин" },
-                    { id: 2, title: "Переменные и типы данных", duration: "25 мин" },
-                    { id: 3, title: "Условные операторы", duration: "30 мин" },
-                    { id: 4, title: "Циклы и функции", duration: "35 мин" },
-                    { id: 5, title: "Практический проект", duration: "40 мин" }
-                ]
-            },
-            4: {
-                title: "Нейросети в образовании",
-                lessons: [
-                    { id: 1, title: "Что такое нейросети", duration: "20 мин" },
-                    { id: 2, title: "ChatGPT в учебе", duration: "25 мин" },
-                    { id: 3, title: "Генерация заданий", duration: "25 мин" },
-                    { id: 4, title: "Проверка работ с ИИ", duration: "30 мин" },
-                    { id: 5, title: "Этика использования ИИ", duration: "20 мин" }
-                ]
-            },
-            5: {
-                title: "Создание тестов и опросов",
-                lessons: [
-                    { id: 1, title: "Типы тестовых заданий", duration: "15 мин" },
-                    { id: 2, title: "Правила составления вопросов", duration: "20 мин" },
-                    { id: 3, title: "Оценка результатов", duration: "20 мин" },
-                    { id: 4, title: "Инструменты для создания", duration: "25 мин" },
-                    { id: 5, title: "Практическая работа", duration: "30 мин" }
-                ]
-            },
-            6: {
-                title: "Публичные выступления",
-                lessons: [
-                    { id: 1, title: "Подготовка к выступлению", duration: "20 мин" },
-                    { id: 2, title: "Структура речи", duration: "25 мин" },
-                    { id: 3, title: "Работа с голосом", duration: "20 мин" },
-                    { id: 4, title: "Язык тела", duration: "20 мин" },
-                    { id: 5, title: "Работа с залом", duration: "25 мин" }
-                ]
-            }
+        // Данные курса с реальными YouTube видео
+        const courseData = {
+            id: 1,
+            title: "Введение в искусственный интеллект",
+            lessons: [
+                { 
+                    id: 1, 
+                    title: "Что такое искусственный интеллект?", 
+                    duration: "15 мин",
+                    videoId: "2ePf9rue2oA",
+                    description: "В этом уроке узнаем, что такое ИИ и где он применяется."
+                },
+                { 
+                    id: 2, 
+                    title: "История развития ИИ", 
+                    duration: "20 мин",
+                    videoId: "oV74koj4hbs",
+                    description: "Как развивался искусственный интеллект от 1950-х до наших дней."
+                },
+                { 
+                    id: 3, 
+                    title: "Основные направления ИИ", 
+                    duration: "25 мин",
+                    videoId: "4RixExFQbgU",
+                    description: "Машинное обучение, нейросети, обработка естественного языка."
+                },
+                { 
+                    id: 4, 
+                    title: "Нейросети и глубокое обучение", 
+                    duration: "30 мин",
+                    videoId: "aircAruvnKk",
+                    description: "Как работают нейронные сети и что такое deep learning."
+                },
+                { 
+                    id: 5, 
+                    title: "Практическое применение ИИ", 
+                    duration: "20 мин",
+                    videoId: "0yCJMt9Mx9c",
+                    description: "Где используется ИИ сегодня: от медицины до образования."
+                }
+            ]
         };
+
+        let currentLesson = 0;
+        let completedLessons = [];
 
         function getUrlParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        function loadCourse() {
-            const courseId = getUrlParam('id');
-            const course = courseLessons[courseId];
-            
-            if (!course) {
-                document.querySelector('.course-info').innerHTML = '<p>Курс не найден</p>';
-                return;
+        function loadProgress() {
+            const courseId = getUrlParam('id') || '1';
+            let saved = localStorage.getItem(`course_progress_${courseId}`);
+            if (saved) {
+                completedLessons = JSON.parse(saved);
+            } else {
+                completedLessons = [];
             }
-            
-            document.getElementById('courseTitle').textContent = course.title;
-            
-            // Загружаем прогресс
-            let progress = JSON.parse(localStorage.getItem(`course_progress_${courseId}`) || '[]');
-            
-            renderLessons(courseId, course.lessons, progress);
         }
-        
-        function renderLessons(courseId, lessons, completedLessons) {
-            const container = document.getElementById('lessonsList');
-            const completedCount = completedLessons.length;
-            const totalCount = lessons.length;
-            const percent = Math.round((completedCount / totalCount) * 100);
-            
+
+        function saveProgress() {
+            const courseId = getUrlParam('id') || '1';
+            localStorage.setItem(`course_progress_${courseId}`, JSON.stringify(completedLessons));
+        }
+
+        function updateProgressBar() {
+            const total = courseData.lessons.length;
+            const completed = completedLessons.length;
+            const percent = Math.round((completed / total) * 100);
             document.getElementById('progressFill').style.width = `${percent}%`;
-            document.getElementById('progressText').innerHTML = `Прогресс: ${completedCount} из ${totalCount} уроков (${percent}%)`;
+            document.getElementById('progressText').innerHTML = `Прогресс: ${completed} из ${total} уроков (${percent}%)`;
+        }
+
+        function playLesson(lessonIndex) {
+            currentLesson = lessonIndex;
+            const lesson = courseData.lessons[lessonIndex];
+            const videoId = lesson.videoId;
+            const videoFrame = document.getElementById('videoFrame');
+            videoFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
             
-            container.innerHTML = lessons.map((lesson, idx) => {
+            // Обновляем активный класс в списке
+            const lessonItems = document.querySelectorAll('.lesson-item');
+            lessonItems.forEach((item, idx) => {
+                if (idx === lessonIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function markCompleted(lessonId, lessonIndex) {
+            if (!completedLessons.includes(lessonId)) {
+                completedLessons.push(lessonId);
+                saveProgress();
+                updateProgressBar();
+                renderLessons();
+                alert(`✅ Урок "${courseData.lessons[lessonIndex].title}" пройден!`);
+            } else {
+                alert(`⚠️ Вы уже прошли этот урок.`);
+            }
+        }
+
+        function renderLessons() {
+            const container = document.getElementById('lessonsList');
+            container.innerHTML = courseData.lessons.map((lesson, idx) => {
                 const isCompleted = completedLessons.includes(lesson.id);
                 return `
-                    <div class="lesson-item ${isCompleted ? 'completed' : ''}" onclick="toggleLesson(${courseId}, ${lesson.id}, ${idx})">
+                    <div class="lesson-item ${isCompleted ? 'completed' : ''} ${currentLesson === idx ? 'active' : ''}" onclick="playLesson(${idx})">
                         <div class="lesson-number">${idx + 1}</div>
                         <div class="lesson-title">${lesson.title}</div>
-                        <div class="lesson-duration">${lesson.duration}</div>
-                        ${isCompleted ? '<div class="complete-badge">✅</div>' : '<button class="btn" style="padding: 0.3rem 0.8rem;">Просмотреть</button>'}
+                        <div class="lesson-duration">⏱ ${lesson.duration}</div>
+                        ${!isCompleted ? 
+                            `<button class="watch-btn" onclick="event.stopPropagation(); markCompleted(${lesson.id}, ${idx})">✅ Отметить пройденным</button>` : 
+                            `<span class="complete-badge">✅ Пройдено</span>`
+                        }
                     </div>
                 `;
             }).join('');
         }
-        
-        function toggleLesson(courseId, lessonId, idx) {
-            let progress = JSON.parse(localStorage.getItem(`course_progress_${courseId}`) || '[]');
-            
-            if (progress.includes(lessonId)) {
-                // Если уже пройден, можно убрать (опционально)
-                if (confirm('Отметить урок как непройденный?')) {
-                    progress = progress.filter(id => id !== lessonId);
-                }
-            } else {
-                // Отмечаем как пройденный
-                alert(`✅ Урок ${idx + 1} пройден!`);
-                progress.push(lessonId);
+
+        function init() {
+            loadProgress();
+            updateProgressBar();
+            renderLessons();
+            // Загружаем первый урок
+            if (courseData.lessons.length > 0) {
+                playLesson(0);
             }
-            
-            localStorage.setItem(`course_progress_${courseId}`, JSON.stringify(progress));
-            
-            // Обновляем отображение
-            const course = courseLessons[courseId];
-            renderLessons(courseId, course.lessons, progress);
         }
-        
-        loadCourse();
+
+        init();
     </script>
 </body>
 </html>
