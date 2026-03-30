@@ -215,26 +215,21 @@
             renderCourses();
         }
         
-        function toggleEnroll(courseId) {
-            const course = courses.find(c => c.id === courseId);
-            if (course) {
-                course.enrolled = !course.enrolled;
-                saveEnrolled();
-                renderCourses();
-            }
-        }
+       function toggleEnroll(courseId) {
+    const course = courses.find(c => c.id === courseId);
+    if (course) {
+        course.enrolled = !course.enrolled;
+        saveEnrolled();
+        renderCourses();
         
-        function renderCourses() {
-            const container = document.getElementById('coursesGrid');
-            let filtered = courses;
-            if (activeCategory !== 'Все') {
-                filtered = courses.filter(c => c.category === activeCategory);
-            }
-            
-            if (filtered.length === 0) {
-                container.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">Нет курсов в этой категории</p>';
-                return;
-            }
+        // Уведомление
+        if (course.enrolled) {
+            alert(`✅ Вы записались на курс "${course.title}"! Перейдите в "Мои курсы" для просмотра.`);
+        } else {
+            alert(`❌ Вы отписались от курса "${course.title}".`);
+        }
+    }
+}
             
             container.innerHTML = filtered.map(course => `
                 <div class="course-card">
