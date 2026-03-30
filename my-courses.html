@@ -124,40 +124,43 @@
         }
 
         function renderCourses() {
-            const enrolledIds = getEnrolledCourses();
-            const enrolledCourses = allCourses.filter(course => enrolledIds.includes(course.id));
-            const container = document.getElementById('coursesContainer');
-            
-            if (enrolledCourses.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">📚</div>
-                        <h3>У вас пока нет записанных курсов</h3>
-                        <p>Перейдите на <a href="courses.html" style="color: #3498db;">страницу курсов</a> и запишитесь на обучение!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = `
-                <div class="courses-grid">
-                    ${enrolledCourses.map(course => `
-                        <div class="course-card">
-                            <div class="course-image">${course.icon}</div>
-                            <div class="course-content">
-                                <span class="course-category">${course.category}</span>
-                                <h3 class="course-title">${course.title}</h3>
-                                <p class="course-description">${course.description}</p>
-                                <div class="course-meta">
-                                    <span class="course-duration">⏱ ${course.duration}</span>
-                                    <button class="btn" onclick="unenroll(${course.id})" style="background: #e74c3c;">Отписаться</button>
-                                </div>
+    const enrolledIds = getEnrolledCourses();
+    const enrolledCourses = allCourses.filter(course => enrolledIds.includes(course.id));
+    const container = document.getElementById('coursesContainer');
+    
+    if (enrolledCourses.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">📚</div>
+                <h3>У вас пока нет записанных курсов</h3>
+                <p>Перейдите на <a href="courses.html" style="color: #3498db;">страницу курсов</a> и запишитесь на обучение!</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = `
+        <div class="courses-grid">
+            ${enrolledCourses.map(course => `
+                <div class="course-card">
+                    <div class="course-image">${course.icon}</div>
+                    <div class="course-content">
+                        <span class="course-category">${course.category}</span>
+                        <h3 class="course-title">${course.title}</h3>
+                        <p class="course-description">${course.description}</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱ ${course.duration}</span>
+                            <div>
+                                <a href="course-view.html?id=${course.id}" class="btn" style="background: #27ae60; margin-right: 0.5rem;">🎬 Продолжить</a>
+                                <button onclick="unenroll(${course.id})" style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">Отписаться</button>
                             </div>
                         </div>
-                    `).join('')}
+                    </div>
                 </div>
-            `;
-        }
+            `).join('')}
+        </div>
+    `;
+}
         
         function unenroll(courseId) {
             if (confirm('Отписаться от этого курса?')) {
