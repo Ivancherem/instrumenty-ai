@@ -40,51 +40,34 @@
             color: #3498db;
             margin: 1.5rem 0 1rem;
         }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            margin: 2rem 0;
-            background: #000;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        .task-block {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin: 1.5rem 0;
-            border-left: 4px solid #3498db;
-        }
-        .task-block h3 {
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
             color: #3498db;
-            margin-bottom: 1rem;
+            text-decoration: none;
+        }
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
         }
         .quiz-question {
             background: #f0f7ff;
-            padding: 1.5rem;
-            border-radius: 15px;
+            padding: 1rem;
+            border-radius: 10px;
             margin: 1rem 0;
         }
         .quiz-option {
-            display: block;
-            padding: 0.8rem;
-            margin: 0.5rem 0;
+            padding: 0.5rem;
+            margin: 0.3rem 0;
             background: white;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-        .quiz-option:hover {
-            background: #e8f4fd;
         }
         .quiz-option.correct {
             background: #27ae60;
@@ -94,29 +77,25 @@
             background: #e74c3c;
             color: white;
         }
-        .download-btn {
-            display: inline-block;
-            background: #27ae60;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            text-decoration: none;
-            border-radius: 8px;
+        .task-block {
+            background: #e8f4fd;
+            padding: 1rem;
+            border-radius: 10px;
             margin: 1rem 0;
         }
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            color: #3498db;
-            text-decoration: none;
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 0.5rem 0;
         }
     </style>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">
-                <a href="index.html">📚 Instrumenty-AI</a>
-            </div>
+            <div class="logo"><a href="index.html">📚 Instrumenty-AI</a></div>
             <ul class="nav-links">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="tools.html">Инструменты</a></li>
@@ -130,65 +109,40 @@
     </header>
 
     <main>
-        <div class="blog-post" id="postContainer"></div>
+        <div id="postContainer"></div>
         <a href="blog.html" class="back-link">← Вернуться к списку статей</a>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
-    </footer>
+    <footer><p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p></footer>
 
     <script>
+        // ВСЕ СТАТЬИ
         const articles = {
             1: {
                 title: "Как ИИ меняет образование",
                 date: "27 марта 2026",
                 icon: "🤖",
-                video: "https://www.youtube.com/embed/2ePf9rue2oA",
                 content: `
                     <h2>Искусственный интеллект в образовании</h2>
-                    <p>Искусственный интеллект (ИИ) стремительно меняет подходы к обучению. Сегодня мы видим, как технологии помогают создавать персонализированные образовательные траектории, автоматизировать рутинные задачи преподавателей и делать обучение более увлекательным.</p>
-                    
-                    <h2>🎬 Видео-урок</h2>
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/2ePf9rue2oA" frameborder="0" allowfullscreen></iframe>
-                    </div>
+                    <p>Искусственный интеллект стремительно меняет подходы к обучению. Технологии помогают создавать персонализированные образовательные траектории и автоматизировать рутинные задачи.</p>
                     
                     <h2>Персонализация обучения</h2>
-                    <p>Главное преимущество ИИ в образовании — возможность адаптировать учебный материал под каждого ученика. Системы на основе ИИ анализируют успеваемость, определяют слабые места и предлагают индивидуальные задания.</p>
+                    <p>Главное преимущество ИИ — возможность адаптировать учебный материал под каждого ученика. Системы анализируют успеваемость и предлагают индивидуальные задания.</p>
                     
                     <div class="task-block">
-                        <h3>📝 Практическое задание</h3>
-                        <p><strong>Задание:</strong> Представьте, что вы учитель. Опишите, как бы вы использовали ИИ для помощи одному из ваших учеников, который отстает по математике.</p>
-                        <textarea id="taskAnswer" rows="4" style="width:100%; padding:0.8rem; margin-top:1rem; border:1px solid #ddd; border-radius:8px;" placeholder="Напишите свой ответ здесь..."></textarea>
-                        <button class="btn" onclick="saveTaskAnswer(1)" style="margin-top:1rem;">💾 Сохранить ответ</button>
-                        <div id="taskSaved" style="color:#27ae60; margin-top:0.5rem;"></div>
+                        <h3>📝 Задание</h3>
+                        <p>Как бы вы использовали ИИ для помощи ученику, который отстает по математике?</p>
+                        <textarea id="answer1" rows="3" placeholder="Напишите ответ..."></textarea>
+                        <button class="btn" onclick="saveAnswer(1)">Сохранить ответ</button>
+                        <div id="saved1" style="color:green; margin-top:5px;"></div>
                     </div>
                     
-                    <h2>📊 Тест для самопроверки</h2>
                     <div class="quiz-question">
-                        <p><strong>Вопрос 1:</strong> Что является главным преимуществом ИИ в образовании?</p>
+                        <p><strong>Вопрос:</strong> Что является главным преимуществом ИИ в образовании?</p>
                         <div class="quiz-option" onclick="checkAnswer(this, 'Адаптация материала под ученика')">А) Автоматическая проверка тестов</div>
                         <div class="quiz-option" onclick="checkAnswer(this, 'Адаптация материала под ученика')">Б) Адаптация материала под ученика</div>
                         <div class="quiz-option" onclick="checkAnswer(this, 'Адаптация материала под ученика')">В) Создание презентаций</div>
                         <div class="quiz-option" onclick="checkAnswer(this, 'Адаптация материала под ученика')">Г) Видео-уроки</div>
-                    </div>
-                    
-                    <div class="quiz-question">
-                        <p><strong>Вопрос 2:</strong> Что ИИ может проверять автоматически?</p>
-                        <div class="quiz-option" onclick="checkAnswer(this, 'Тесты, эссе и устные ответы')">А) Только тесты</div>
-                        <div class="quiz-option" onclick="checkAnswer(this, 'Тесты, эссе и устные ответы')">Б) Тесты и эссе</div>
-                        <div class="quiz-option" onclick="checkAnswer(this, 'Тесты, эссе и устные ответы')">В) Тесты, эссе и устные ответы</div>
-                        <div class="quiz-option" onclick="checkAnswer(this, 'Тесты, эссе и устные ответы')">Г) Только устные ответы</div>
-                    </div>
-                    
-                    <div id="quizResult" style="margin-top:1rem; padding:1rem; background:#e8f4fd; border-radius:10px; display:none;"></div>
-                    <button class="btn" onclick="checkAllAnswers()">Проверить все ответы</button>
-                    
-                    <div class="task-block">
-                        <h3>📥 Материалы для скачивания</h3>
-                        <p>Скачайте презентацию по теме:</p>
-                        <a href="#" class="download-btn" onclick="downloadMaterial()">📄 Скачать презентацию (PDF)</a>
                     </div>
                 `
             },
@@ -196,23 +150,77 @@
                 title: "5 методов эффективного обучения",
                 date: "25 марта 2026",
                 icon: "📚",
-                video: "https://www.youtube.com/embed/5MgBikgcWnY",
                 content: `
                     <h2>Научные подходы к обучению</h2>
-                    <p>Исследования показывают, что не все методы обучения одинаково эффективны. Вот 5 научно доказанных техник.</p>
-                    
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/5MgBikgcWnY" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    
-                    <h2>1. Активное повторение</h2>
-                    <p>Вместо пассивного перечитывания, старайтесь вспоминать материал без подсказок.</p>
-                    
+                    <p>Исследования показывают, что не все методы одинаково эффективны. Вот 5 научно доказанных техник.</p>
+                    <ul>
+                        <li><strong>Активное повторение</strong> — вспоминайте материал без подсказок</li>
+                        <li><strong>Метод Помодоро</strong> — 25 минут работы, 5 отдыха</li>
+                        <li><strong>Объяснение другим</strong> — учите, объясняя</li>
+                        <li><strong>Интервальное повторение</strong> — повторяйте через увеличивающиеся интервалы</li>
+                        <li><strong>Тестирование</strong> — проверяйте себя</li>
+                    </ul>
                     <div class="task-block">
-                        <h3>📝 Практическое задание</h3>
-                        <p><strong>Задание:</strong> Возьмите любую тему, которую недавно изучали, и составьте 5 вопросов для самопроверки без использования учебника.</p>
-                        <textarea id="taskAnswer" rows="4" style="width:100%; padding:0.8rem; margin-top:1rem; border:1px solid #ddd; border-radius:8px;" placeholder="Напишите свои вопросы..."></textarea>
-                        <button class="btn" onclick="saveTaskAnswer(2)" style="margin-top:1rem;">💾 Сохранить вопросы</button>
+                        <h3>📝 Задание</h3>
+                        <p>Какой метод вам ближе всего? Почему?</p>
+                        <textarea id="answer2" rows="3" placeholder="Напишите ответ..."></textarea>
+                        <button class="btn" onclick="saveAnswer(2)">Сохранить ответ</button>
+                        <div id="saved2" style="color:green; margin-top:5px;"></div>
+                    </div>
+                `
+            },
+            3: {
+                title: "Подготовка к экзаменам: пошаговый план",
+                date: "22 марта 2026",
+                icon: "🎓",
+                content: `
+                    <h2>Стратегия успешной подготовки</h2>
+                    <p>Составьте план за 2-3 недели. Разбейте материал на блоки. Используйте тесты для самопроверки. Обязательно высыпайтесь перед экзаменом.</p>
+                    <div class="task-block">
+                        <h3>📝 Задание</h3>
+                        <p>Напишите свой план подготовки к ближайшему экзамену.</p>
+                        <textarea id="answer3" rows="3" placeholder="Напишите ответ..."></textarea>
+                        <button class="btn" onclick="saveAnswer(3)">Сохранить ответ</button>
+                        <div id="saved3" style="color:green; margin-top:5px;"></div>
+                    </div>
+                `
+            },
+            4: {
+                title: "Лучшие бесплатные образовательные ресурсы",
+                date: "20 марта 2026",
+                icon: "💻",
+                content: `
+                    <h2>Где учиться бесплатно</h2>
+                    <ul>
+                        <li><strong>Stepik.org</strong> — курсы по программированию, математике</li>
+                        <li><strong>Coursera.org</strong> — курсы от ведущих вузов</li>
+                        <li><strong>Duolingo</strong> — изучение языков</li>
+                        <li><strong>ПостНаука</strong> — видеолекции ученых</li>
+                    </ul>
+                `
+            },
+            5: {
+                title: "Нейропластичность: как мозг учится",
+                date: "18 марта 2026",
+                icon: "🧠",
+                content: `
+                    <h2>Что такое нейропластичность</h2>
+                    <p>Нейропластичность — это способность мозга создавать новые нейронные связи на протяжении всей жизни. Чтобы учиться эффективно: высыпайтесь, пробуйте новое, регулярно повторяйте.</p>
+                `
+            },
+            6: {
+                title: "Как не прокрастинировать: рабочие техники",
+                date: "15 марта 2026",
+                icon: "🎯",
+                content: `
+                    <h2>Почему мы откладываем дела</h2>
+                    <p>Прокрастинация — это способ справиться со стрессом. Техника 2 минут: если дело занимает меньше 2 минут — сделайте сразу. Метод Помодоро помогает войти в рабочий поток.</p>
+                    <div class="task-block">
+                        <h3>📝 Задание</h3>
+                        <p>Какая техника борьбы с прокрастинацией помогла бы вам?</p>
+                        <textarea id="answer6" rows="3" placeholder="Напишите ответ..."></textarea>
+                        <button class="btn" onclick="saveAnswer(6)">Сохранить ответ</button>
+                        <div id="saved6" style="color:green; margin-top:5px;"></div>
                     </div>
                 `
             }
@@ -223,12 +231,36 @@
             return urlParams.get(param);
         }
 
+        function saveAnswer(articleId) {
+            const answer = document.getElementById(`answer${articleId}`).value;
+            if (!answer.trim()) {
+                alert('Напишите ответ!');
+                return;
+            }
+            localStorage.setItem(`blog_answer_${articleId}`, answer);
+            document.getElementById(`saved${articleId}`).innerHTML = '✅ Ответ сохранен!';
+            setTimeout(() => {
+                document.getElementById(`saved${articleId}`).innerHTML = '';
+            }, 2000);
+        }
+
+        function checkAnswer(element, correct) {
+            if (element.textContent.trim() === correct) {
+                element.classList.add('correct');
+                alert('✅ Правильно!');
+            } else {
+                element.classList.add('wrong');
+                alert(`❌ Неправильно. Правильный ответ: ${correct}`);
+            }
+        }
+
         function loadPost() {
             const id = getUrlParam('id');
             const article = articles[id];
+            const container = document.getElementById('postContainer');
             
             if (!article) {
-                document.getElementById('postContainer').innerHTML = `
+                container.innerHTML = `
                     <div class="blog-post" style="text-align: center;">
                         <h1>Статья не найдена</h1>
                         <p>К сожалению, такой статьи нет в нашем блоге.</p>
@@ -237,54 +269,20 @@
                 return;
             }
             
-            document.getElementById('postContainer').innerHTML = `
-                <div class="post-header">
-                    <div class="post-icon">${article.icon}</div>
-                    <h1 class="post-title">${article.title}</h1>
-                    <div class="post-date">${article.date}</div>
-                </div>
-                <div class="post-content">
-                    ${article.content}
+            container.innerHTML = `
+                <div class="blog-post">
+                    <div class="post-header">
+                        <div class="post-icon">${article.icon}</div>
+                        <h1 class="post-title">${article.title}</h1>
+                        <div class="post-date">${article.date}</div>
+                    </div>
+                    <div class="post-content">
+                        ${article.content}
+                    </div>
                 </div>
             `;
         }
-        
-        function checkAnswer(element, correctAnswer) {
-            const answer = element.textContent.trim();
-            if (answer === correctAnswer) {
-                element.classList.add('correct');
-                element.classList.remove('wrong');
-                alert('✅ Правильно!');
-            } else {
-                element.classList.add('wrong');
-                element.classList.remove('correct');
-                alert('❌ Неправильно. Попробуйте еще раз!');
-            }
-        }
-        
-        function checkAllAnswers() {
-            const resultDiv = document.getElementById('quizResult');
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = '<p>✅ Тест пройден! Вы можете проверить свои знания, отвечая на вопросы выше.</p>';
-        }
-        
-        function saveTaskAnswer(articleId) {
-            const answer = document.getElementById('taskAnswer').value;
-            if (!answer.trim()) {
-                alert('Напишите ответ перед сохранением!');
-                return;
-            }
-            localStorage.setItem(`task_${articleId}`, answer);
-            document.getElementById('taskSaved').innerHTML = '✅ Ответ сохранен!';
-            setTimeout(() => {
-                document.getElementById('taskSaved').innerHTML = '';
-            }, 3000);
-        }
-        
-        function downloadMaterial() {
-            alert('📄 Скачивание материалов: В разработке. Скоро появится возможность скачать презентацию!');
-        }
-        
+
         loadPost();
     </script>
 </body>
