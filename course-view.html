@@ -141,7 +141,7 @@
         
         <div class="course-player">
             <div class="video-container" id="videoContainer">
-                <iframe id="videoFrame" src="https://www.youtube.com/embed/2ePf9rue2oA" frameborder="0" allowfullscreen></iframe>
+                <iframe id="videoFrame" src="https://rutube.ru/play/embed/12d055a5b4f61ba3d5908f6d9b307f8f/" frameborder="0" allowfullscreen></iframe>
             </div>
             <div class="course-info">
                 <h1 class="course-title" id="courseTitle">Введение в искусственный интеллект</h1>
@@ -159,44 +159,40 @@
     </footer>
 
     <script>
-        // Данные курса с реальными YouTube видео
+        // Данные курса с видео на Rutube
         const courseData = {
             id: 1,
             title: "Введение в искусственный интеллект",
             lessons: [
-               { 
-    id: 1, 
-    title: "Что такое искусственный интеллект?", 
-    duration: "27 мин",
-    videoId: "12d055a5b4f61ba3d5908f6d9b307f8f"   // ← новый рабочий ID
-},
+                { 
+                    id: 1, 
+                    title: "Что такое искусственный интеллект?", 
+                    duration: "27 мин",
+                    videoId: "12d055a5b4f61ba3d5908f6d9b307f8f"
+                },
                 { 
                     id: 2, 
                     title: "История развития ИИ", 
                     duration: "20 мин",
-                    videoId: "oV74koj4hbs",
-                    description: "Как развивался искусственный интеллект от 1950-х до наших дней."
+                    videoId: "d637428be6cdb9fc26010452c7b0940c"
                 },
                 { 
                     id: 3, 
                     title: "Основные направления ИИ", 
                     duration: "25 мин",
-                    videoId: "4RixExFQbgU",
-                    description: "Машинное обучение, нейросети, обработка естественного языка."
+                    videoId: "1d639cb8af9a44a6a02e925ed72dee0b"
                 },
                 { 
                     id: 4, 
                     title: "Нейросети и глубокое обучение", 
                     duration: "30 мин",
-                    videoId: "aircAruvnKk",
-                    description: "Как работают нейронные сети и что такое deep learning."
+                    videoId: "481d560516b2a711a6d38b3eaed92c89"
                 },
                 { 
                     id: 5, 
                     title: "Практическое применение ИИ", 
                     duration: "20 мин",
-                    videoId: "0yCJMt9Mx9c",
-                    description: "Где используется ИИ сегодня: от медицины до образования."
+                    videoId: "e819d5d42d8953d7c32ac0dd748df88a"
                 }
             ]
         };
@@ -237,9 +233,8 @@
             const lesson = courseData.lessons[lessonIndex];
             const videoId = lesson.videoId;
             const videoFrame = document.getElementById('videoFrame');
-            videoFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            videoFrame.src = `https://rutube.ru/play/embed/${videoId}/`;
             
-            // Обновляем активный класс в списке
             const lessonItems = document.querySelectorAll('.lesson-item');
             lessonItems.forEach((item, idx) => {
                 if (idx === lessonIndex) {
@@ -284,7 +279,6 @@
             loadProgress();
             updateProgressBar();
             renderLessons();
-            // Загружаем первый урок
             if (courseData.lessons.length > 0) {
                 playLesson(0);
             }
