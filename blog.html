@@ -7,58 +7,18 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
     <style>
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-        .blog-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        .blog-card:hover {
-            transform: translateY(-5px);
-        }
-        .blog-image {
-            background: linear-gradient(135deg, #3498db, #2c3e50);
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-        }
-        .blog-content {
-            padding: 1.5rem;
-        }
-        .blog-date {
-            color: #999;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        .blog-title {
-            font-size: 1.3rem;
-            margin-bottom: 0.8rem;
-            color: #2c3e50;
-        }
-        .blog-excerpt {
-            color: #666;
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-        .read-more {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .read-more:hover {
-            text-decoration: underline;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #333;
         }
         header {
             background: #2c3e50;
+            color: white;
             padding: 15px 20px;
             border-radius: 10px;
             margin-bottom: 30px;
@@ -69,7 +29,72 @@
         header nav ul li a { color: #ddd; text-decoration: none; }
         header nav ul li a:hover { color: white; }
         .logo { font-size: 1.5rem; font-weight: bold; }
+        .article-card {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .article-card h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .article-date {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        .article-content {
+            margin-top: 15px;
+            line-height: 1.9;
+        }
+        .article-content p { margin: 1rem 0; }
+        .article-content h3 { margin-top: 1.5rem; }
+        .task-block {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        .task-block textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            min-height: 80px;
+        }
+        .task-block button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .task-block button:hover { background: #2980b9; }
+        .quiz-option {
+            display: block;
+            padding: 10px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .quiz-option:hover { background: #e9ecef; }
+        .quiz-option.selected { border-color: #3498db; background: #e3f0ff; }
+        .quiz-option.correct { border-color: #28a745; background: #d4edda; }
+        .quiz-option.wrong { border-color: #dc3545; background: #f8d7da; }
+        .save-status { margin-top: 10px; font-weight: bold; }
+        .save-status.success { color: #28a745; }
+        .save-status.error { color: #dc3545; }
         footer { text-align: center; margin-top: 40px; color: #999; font-size: 0.9rem; }
+        hr { border: none; border-top: 2px solid #eee; margin: 40px 0; }
     </style>
 </head>
 <body>
@@ -87,42 +112,203 @@
         </ul>
     </nav>
 </header>
-
 <main>
     <h1>📰 Блог об образовании и технологиях</h1>
-    <p style="text-align: center; margin-bottom: 2rem;">Полезные статьи для студентов, преподавателей и всех, кто учится</p>
-    <div class="blog-grid" id="blogGrid"></div>
+    <p style="text-align:center;margin-bottom:2rem;">Полезные статьи для студентов, преподавателей и всех, кто учится</p>
+    <div id="blogContainer"></div>
 </main>
-
-<footer>
-    <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
-</footer>
-
+<footer><p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p></footer>
 <script>
-    const articles = [
-        { id: 1, icon: "🤖", date: "27 марта 2026", title: "Как ИИ меняет образование", excerpt: "Искусственный интеллект открывает новые возможности для персонализированного обучения." },
-        { id: 2, icon: "📚", date: "25 марта 2026", title: "5 методов эффективного обучения", excerpt: "Научно доказанные техники, которые помогут учиться быстрее и запоминать больше информации." },
-        { id: 3, icon: "🎓", date: "22 марта 2026", title: "Подготовка к экзаменам: пошаговый план", excerpt: "Как организовать подготовку, чтобы сдать экзамены на отлично без стресса и перегрузок." },
-        { id: 4, icon: "💻", date: "20 марта 2026", title: "Лучшие бесплатные образовательные ресурсы", excerpt: "Подборка качественных сайтов, курсов и приложений для самообразования." },
-        { id: 5, icon: "🧠", date: "18 марта 2026", title: "Нейропластичность: как мозг учится", excerpt: "Понимание работы мозга поможет сделать обучение более эффективным и осознанным." },
-        { id: 6, icon: "🎯", date: "15 марта 2026", title: "Как не прокрастинировать: рабочие техники", excerpt: "Практические советы, которые помогут победить прокрастинацию и начать действовать." }
-    ];
-
-    function renderBlog() {
-        const grid = document.getElementById('blogGrid');
-        grid.innerHTML = articles.map(article => `
-            <div class="blog-card">
-                <div class="blog-image">${article.icon}</div>
-                <div class="blog-content">
-                    <div class="blog-date">${article.date}</div>
-                    <h3 class="blog-title">${article.title}</h3>
-                    <p class="blog-excerpt">${article.excerpt}</p>
-                    <a href="blog-post.html?id=${article.id}" class="read-more">Читать далее →</a>
-                </div>
+const articles = [
+{
+    id: 1,
+    icon: "🤖",
+    date: "27 марта 2026",
+    title: "Как ИИ меняет образование",
+    content: `
+        <p><strong>Искусственный интеллект в образовании</strong></p>
+        <p>Искусственный интеллект (ИИ) стремительно меняет подходы к обучению. Сегодня мы видим, как технологии помогают создавать персонализированные образовательные траектории, автоматизировать рутинные задачи преподавателей и делать обучение более увлекательным.</p>
+        <h3>Персонализация обучения</h3>
+        <p>Главное преимущество ИИ в образовании — возможность адаптировать учебный материал под каждого ученика. Системы на основе ИИ анализируют успеваемость, определяют слабые места и предлагают индивидуальные задания.</p>
+        <div class="task-block">
+            <h4>📝 Практическое задание</h4>
+            <p>Представьте, что вы учитель. Опишите, как бы вы использовали ИИ для помощи ученику, который отстает по математике.</p>
+            <textarea id="answerField1" placeholder="Напишите свой ответ здесь..."></textarea>
+            <br><br>
+            <button onclick="saveAnswer(1)">💾 Сохранить ответ</button>
+            <div id="saveStatus1" class="save-status"></div>
+        </div>
+        <div class="task-block">
+            <h4>❓ Вопрос для самопроверки</h4>
+            <p><strong>Что является главным преимуществом ИИ в образовании?</strong></p>
+            <div id="quizOptions1">
+                <div class="quiz-option" onclick="selectAnswer(1, 0)">А) Автоматическая проверка тестов</div>
+                <div class="quiz-option" onclick="selectAnswer(1, 1)">Б) Адаптация материала под ученика</div>
+                <div class="quiz-option" onclick="selectAnswer(1, 2)">В) Создание презентаций</div>
+                <div class="quiz-option" onclick="selectAnswer(1, 3)">Г) Видео-уроки</div>
             </div>
-        `).join('');
+            <div id="quizResult1" style="margin-top:10px;font-weight:bold;"></div>
+        </div>
+    `
+},
+{
+    id: 2,
+    icon: "📚",
+    date: "25 марта 2026",
+    title: "5 методов эффективного обучения",
+    content: `
+        <p><strong>5 методов эффективного обучения</strong></p>
+        <p>В этой статье мы рассмотрим научно доказанные техники, которые помогут вам учиться быстрее и запоминать больше информации.</p>
+        <h3>1. Метод интервального повторения</h3>
+        <p>Повторяйте материал через определенные промежутки времени, чтобы закрепить знания в долговременной памяти.</p>
+        <h3>2. Активное воспроизведение</h3>
+        <p>Вместо пассивного чтения, старайтесь вспоминать информацию без подсказок.</p>
+        <h3>3. Метод Фейнмана</h3>
+        <p>Объясняйте сложные концепции простыми словами, как будто учите кого-то другого.</p>
+        <h3>4. Чередование тем</h3>
+        <p>Переключайтесь между разными темами, чтобы улучшить понимание и запоминание.</p>
+        <h3>5. Практическое применение</h3>
+        <p>Сразу применяйте полученные знания на практике, чтобы закрепить материал.</p>
+    `
+},
+{
+    id: 3,
+    icon: "🎓",
+    date: "22 марта 2026",
+    title: "Подготовка к экзаменам: пошаговый план",
+    content: `
+        <p><strong>Подготовка к экзаменам: пошаговый план</strong></p>
+        <p>Успешная подготовка к экзаменам — это не просто зубрежка, а системный подход. Вот план, который поможет вам сдать экзамены на отлично.</p>
+        <h3>Шаг 1: Составьте расписание</h3>
+        <p>Разбейте материал на небольшие блоки и распределите их по дням.</p>
+        <h3>Шаг 2: Используйте активное повторение</h3>
+        <p>Вместо пассивного чтения, старайтесь пересказывать материал своими словами.</p>
+        <h3>Шаг 3: Делайте перерывы</h3>
+        <p>Каждые 45-50 минут делайте 10-15 минут перерыва.</p>
+        <h3>Шаг 4: Практические задания</h3>
+        <p>Решайте примеры, задачи и тесты.</p>
+        <h3>Шаг 5: Сон и питание</h3>
+        <p>Не забывайте про полноценный сон и правильное питание.</p>
+    `
+},
+{
+    id: 4,
+    icon: "💻",
+    date: "20 марта 2026",
+    title: "Лучшие бесплатные образовательные ресурсы",
+    content: `
+        <p><strong>Лучшие бесплатные образовательные ресурсы</strong></p>
+        <p>В интернете есть множество бесплатных ресурсов для самообразования:</p>
+        <h3>1. Coursera</h3>
+        <p>Бесплатные курсы от ведущих университетов мира.</p>
+        <h3>2. Stepik</h3>
+        <p>Российская платформа с курсами по программированию и математике.</p>
+        <h3>3. Khan Academy</h3>
+        <p>Бесплатные уроки по математике, науке, истории.</p>
+        <h3>4. Яндекс.Практикум</h3>
+        <p>Бесплатные уроки по программированию и аналитике.</p>
+        <h3>5. Лекториум</h3>
+        <p>Лекции ведущих российских ученых.</p>
+    `
+},
+{
+    id: 5,
+    icon: "🧠",
+    date: "18 марта 2026",
+    title: "Нейропластичность: как мозг учится",
+    content: `
+        <p><strong>Нейропластичность: как мозг учится</strong></p>
+        <p>Нейропластичность — это способность мозга изменяться и адаптироваться. Благодаря этому мы можем учиться новому на протяжении всей жизни.</p>
+        <h3>Как работает нейропластичность</h3>
+        <p>Мозг состоит из нейронов, которые соединяются друг с другом через синапсы. Когда мы учимся, эти связи укрепляются.</p>
+        <h3>Как улучшить нейропластичность</h3>
+        <p>1. Регулярно учитесь новому.</p>
+        <p>2. Занимайтесь физической активностью.</p>
+        <p>3. Медитируйте.</p>
+        <p>4. Спите достаточно.</p>
+    `
+},
+{
+    id: 6,
+    icon: "🎯",
+    date: "15 марта 2026",
+    title: "Как не прокрастинировать: рабочие техники",
+    content: `
+        <p><strong>Как не прокрастинировать: рабочие техники</strong></p>
+        <p>Прокрастинация — это проблема, с которой сталкивается каждый. Вот несколько техник, которые помогут начать действовать.</p>
+        <h3>1. Правило 5 минут</h3>
+        <p>Скажите себе, что поработаете всего 5 минут.</p>
+        <h3>2. Метод Pomodoro</h3>
+        <p>Работайте 25 минут, затем делайте 5 минут перерыва.</p>
+        <h3>3. Разбейте задачу на части</h3>
+        <p>Большие задачи пугают. Разделите их на маленькие шаги.</p>
+        <h3>4. Уберите отвлекающие факторы</h3>
+        <p>Выключите уведомления, уберите телефон.</p>
+        <h3>5. Награждайте себя</h3>
+        <p>После выполнения задачи поощряйте себя.</p>
+    `
+}
+];
+
+const correctAnswers = {1: 1};
+
+function saveAnswer(articleId) {
+    const field = document.getElementById('answerField' + articleId);
+    const status = document.getElementById('saveStatus' + articleId);
+    if (!field) return;
+    const answer = field.value.trim();
+    if (!answer) {
+        status.textContent = '❌ Напишите ответ.';
+        status.className = 'save-status error';
+        return;
     }
-    renderBlog();
+    localStorage.setItem('savedAnswer_' + articleId, answer);
+    status.textContent = '✅ Сохранено!';
+    status.className = 'save-status success';
+}
+
+function selectAnswer(articleId, index) {
+    const options = document.querySelectorAll('#quizOptions' + articleId + ' .quiz-option');
+    options.forEach((el, i) => {
+        el.classList.remove('selected', 'correct', 'wrong');
+        if (i === index) el.classList.add('selected');
+    });
+    const result = document.getElementById('quizResult' + articleId);
+    if (index === correctAnswers[articleId]) {
+        result.innerHTML = '✅ Правильно! Адаптация материала под ученика — это главное преимущество ИИ.';
+        result.style.color = '#28a745';
+    } else {
+        result.innerHTML = '❌ Попробуйте еще раз.';
+        result.style.color = '#dc3545';
+    }
+}
+
+function renderBlog() {
+    const container = document.getElementById('blogContainer');
+    container.innerHTML = articles.map(a => `
+        <div class="article-card">
+            <h2>${a.icon} ${a.title}</h2>
+            <div class="article-date">${a.date}</div>
+            <div class="article-content">${a.content}</div>
+        </div>
+        <hr>
+    `).join('');
+    
+    // Восстанавливаем сохранённые ответы
+    articles.forEach(a => {
+        const saved = localStorage.getItem('savedAnswer_' + a.id);
+        if (saved) {
+            const field = document.getElementById('answerField' + a.id);
+            const status = document.getElementById('saveStatus' + a.id);
+            if (field) {
+                field.value = saved;
+                status.textContent = '📂 Загружено';
+                status.className = 'save-status success';
+            }
+        }
+    });
+}
+renderBlog();
 </script>
 </body>
 </html>
