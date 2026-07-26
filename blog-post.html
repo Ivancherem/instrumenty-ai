@@ -5,398 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Статья — Instrumenty-AI</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233498db'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3E📚%3C/text%3E%3C/svg%3E">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.8;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f8f9fa;
-            color: #333;
-        }
-        header {
-            background: #2c3e50;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-        }
-        header a {
-            color: white;
-            text-decoration: none;
-        }
-        header nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        header nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-            margin: 0;
-            padding: 0;
-            flex-wrap: wrap;
-        }
-        header nav ul li a {
-            color: #ddd;
-            text-decoration: none;
-        }
-        header nav ul li a:hover {
-            color: white;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .article-container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .article-container h1 {
-            margin-top: 0;
-            color: #2c3e50;
-        }
-        .article-date {
-            color: #999;
-            font-size: 0.9rem;
-        }
-        .article-content {
-            line-height: 1.9;
-            font-size: 1.1rem;
-        }
-        .article-content p {
-            margin: 1.5rem 0;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #3498db;
-            text-decoration: none;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            color: #999;
-            font-size: 0.9rem;
-        }
-        .task-block {
-            background: #f0f7ff;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #3498db;
-        }
-        .task-block textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-            min-height: 80px;
-        }
-        .task-block button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .task-block button:hover {
-            background: #2980b9;
-        }
-        .quiz-option {
-            display: block;
-            padding: 10px;
-            margin: 8px 0;
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .quiz-option:hover {
-            background: #e9ecef;
-        }
-        .quiz-option.selected {
-            border-color: #3498db;
-            background: #e3f0ff;
-        }
-        .quiz-option.correct {
-            border-color: #28a745;
-            background: #d4edda;
-        }
-        .quiz-option.wrong {
-            border-color: #dc3545;
-            background: #f8d7da;
-        }
-        .save-status {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        .save-status.success {
-            color: #28a745;
-        }
-        .save-status.error {
-            color: #dc3545;
-        }
-    </style>
 </head>
 <body>
-
-<header>
-    <nav>
-        <div class="logo"><a href="index.html">📚 Instrumenty-AI</a></div>
-        <ul>
-            <li><a href="index.html">Главная</a></li>
-            <li><a href="tools.html">Инструменты</a></li>
-            <li><a href="blog.html">Блог</a></li>
-            <li><a href="courses.html">Курсы</a></li>
-            <li><a href="my-courses.html">Мои курсы</a></li>
-            <li><a href="about.html">О проекте</a></li>
-            <li><a href="contacts.html">Контакты</a></li>
-        </ul>
-    </nav>
-</header>
-
-<main>
-    <div class="article-container" id="articleContainer">
-        <p>Загрузка статьи...</p>
-    </div>
-    <a href="blog.html" class="back-link">← Вернуться к списку статей</a>
-</main>
-
-<footer>
-    <p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p>
-</footer>
-
-<script>
-    // ========== ВСЕ СТАТЬИ (ТОЧНО ТАКИЕ ЖЕ, КАК В blog.html) ==========
-    const articles = [
-        {
-            id: 1,
-            icon: "🤖",
-            date: "27 марта 2026",
-            title: "Как ИИ меняет образование",
-            excerpt: "Искусственный интеллект открывает новые возможности для персонализированного обучения.",
-            content: `
-                <p><strong>Искусственный интеллект в образовании</strong></p>
-                <p>Искусственный интеллект (ИИ) стремительно меняет подходы к обучению. Сегодня мы видим, как технологии помогают создавать персонализированные образовательные траектории, автоматизировать рутинные задачи преподавателей и делать обучение более увлекательным.</p>
-                <h3>Персонализация обучения</h3>
-                <p>Главное преимущество ИИ в образовании — возможность адаптировать учебный материал под каждого ученика. Системы на основе ИИ анализируют успеваемость, определяют слабые места и предлагают индивидуальные задания.</p>
-                <div class="task-block">
-                    <h4>📝 Практическое задание</h4>
-                    <p>Представьте, что вы учитель. Опишите, как бы вы использовали ИИ для помощи ученику, который отстает по математике.</p>
-                    <textarea id="answerField" placeholder="Напишите свой ответ здесь..."></textarea>
-                    <br><br>
-                    <button onclick="saveAnswer()">💾 Сохранить ответ</button>
-                    <div id="saveStatus" class="save-status"></div>
-                </div>
-                <div class="task-block">
-                    <h4>❓ Вопрос для самопроверки</h4>
-                    <p><strong>Что является главным преимуществом ИИ в образовании?</strong></p>
-                    <div id="quizOptions">
-                        <div class="quiz-option" data-index="0" onclick="selectAnswer(0)">А) Автоматическая проверка тестов</div>
-                        <div class="quiz-option" data-index="1" onclick="selectAnswer(1)">Б) Адаптация материала под ученика</div>
-                        <div class="quiz-option" data-index="2" onclick="selectAnswer(2)">В) Создание презентаций</div>
-                        <div class="quiz-option" data-index="3" onclick="selectAnswer(3)">Г) Видео-уроки</div>
-                    </div>
-                    <div id="quizResult" style="margin-top:10px;font-weight:bold;"></div>
-                </div>
-            `
-        },
-        {
-            id: 2,
-            icon: "📚",
-            date: "25 марта 2026",
-            title: "5 методов эффективного обучения",
-            excerpt: "Научно доказанные техники, которые помогут учиться быстрее и запоминать больше информации.",
-            content: `
-                <p><strong>5 методов эффективного обучения</strong></p>
-                <p>В этой статье мы рассмотрим научно доказанные техники, которые помогут вам учиться быстрее и запоминать больше информации.</p>
-                <h3>1. Метод интервального повторения</h3>
-                <p>Повторяйте материал через определенные промежутки времени, чтобы закрепить знания в долговременной памяти.</p>
-                <h3>2. Активное воспроизведение</h3>
-                <p>Вместо пассивного чтения, старайтесь вспоминать информацию без подсказок.</p>
-                <h3>3. Метод Фейнмана</h3>
-                <p>Объясняйте сложные концепции простыми словами, как будто учите кого-то другого.</p>
-                <h3>4. Чередование тем</h3>
-                <p>Переключайтесь между разными темами, чтобы улучшить понимание и запоминание.</p>
-                <h3>5. Практическое применение</h3>
-                <p>Сразу применяйте полученные знания на практике, чтобы закрепить материал.</p>
-            `
-        },
-        {
-            id: 3,
-            icon: "🎓",
-            date: "22 марта 2026",
-            title: "Подготовка к экзаменам: пошаговый план",
-            excerpt: "Как организовать подготовку, чтобы сдать экзамены на отлично без стресса и перегрузок.",
-            content: `
-                <p><strong>Подготовка к экзаменам: пошаговый план</strong></p>
-                <p>Успешная подготовка к экзаменам — это не просто зубрежка, а системный подход. Вот план, который поможет вам сдать экзамены на отлично.</p>
-                <h3>Шаг 1: Составьте расписание</h3>
-                <p>Разбейте материал на небольшие блоки и распределите их по дням. Уделяйте каждому предмету не менее 30 минут в день.</p>
-                <h3>Шаг 2: Используйте активное повторение</h3>
-                <p>Вместо пассивного чтения, старайтесь пересказывать материал своими словами.</p>
-                <h3>Шаг 3: Делайте перерывы</h3>
-                <p>Каждые 45-50 минут делайте 10-15 минут перерыва, чтобы мозг мог отдохнуть.</p>
-                <h3>Шаг 4: Практические задания</h3>
-                <p>Решайте примеры, задачи и тесты, чтобы закрепить теорию на практике.</p>
-                <h3>Шаг 5: Сон и питание</h3>
-                <p>Не забывайте про полноценный сон и правильное питание — они напрямую влияют на продуктивность.</p>
-            `
-        },
-        {
-            id: 4,
-            icon: "💻",
-            date: "20 марта 2026",
-            title: "Лучшие бесплатные образовательные ресурсы",
-            excerpt: "Подборка качественных сайтов, курсов и приложений для самообразования.",
-            content: `
-                <p><strong>Лучшие бесплатные образовательные ресурсы</strong></p>
-                <p>В интернете есть множество бесплатных ресурсов для самообразования. Вот лучшие из них:</p>
-                <h3>1. Coursera</h3>
-                <p>Бесплатные курсы от ведущих университетов мира. Можно получить сертификат.</p>
-                <h3>2. Stepik</h3>
-                <p>Российская платформа с курсами по программированию, математике и многим другим предметам.</p>
-                <h3>3. Khan Academy</h3>
-                <p>Бесплатные уроки по математике, науке, истории и многому другому.</p>
-                <h3>4. Яндекс.Практикум</h3>
-                <p>Бесплатные уроки по программированию и аналитике данных.</p>
-                <h3>5. Лекториум</h3>
-                <p>Лекции ведущих российских ученых и преподавателей.</p>
-            `
-        },
-        {
-            id: 5,
-            icon: "🧠",
-            date: "18 марта 2026",
-            title: "Нейропластичность: как мозг учится",
-            excerpt: "Понимание работы мозга поможет сделать обучение более эффективным и осознанным.",
-            content: `
-                <p><strong>Нейропластичность: как мозг учится</strong></p>
-                <p>Нейропластичность — это способность мозга изменяться и адаптироваться. Благодаря этому мы можем учиться новому на протяжении всей жизни.</p>
-                <h3>Как работает нейропластичность</h3>
-                <p>Мозг состоит из нейронов, которые соединяются друг с другом через синапсы. Когда мы учимся, эти связи укрепляются и создаются новые.</p>
-                <h3>Как улучшить нейропластичность</h3>
-                <p>1. Регулярно учитесь новому (иностранные языки, музыка, программирование).</p>
-                <p>2. Занимайтесь физической активностью — она улучшает кровообращение в мозге.</p>
-                <p>3. Медитируйте — это помогает снизить стресс и улучшить концентрацию.</p>
-                <p>4. Спите достаточно — во сне мозг обрабатывает информацию и укрепляет связи.</p>
-            `
-        },
-        {
-            id: 6,
-            icon: "🎯",
-            date: "15 марта 2026",
-            title: "Как не прокрастинировать: рабочие техники",
-            excerpt: "Практические советы, которые помогут победить прокрастинацию и начать действовать.",
-            content: `
-                <p><strong>Как не прокрастинировать: рабочие техники</strong></p>
-                <p>Прокрастинация — это проблема, с которой сталкивается каждый. Вот несколько техник, которые помогут начать действовать.</p>
-                <h3>1. Правило 5 минут</h3>
-                <p>Скажите себе, что поработаете всего 5 минут. Часто этого достаточно, чтобы начать и продолжить.</p>
-                <h3>2. Метод Pomodoro</h3>
-                <p>Работайте 25 минут, затем делайте 5 минут перерыва. Повторяйте цикл 4 раза и делайте большой перерыв.</p>
-                <h3>3. Разбейте задачу на части</h3>
-                <p>Большие задачи пугают. Разделите их на маленькие шаги, которые легко выполнить.</p>
-                <h3>4. Уберите отвлекающие факторы</h3>
-                <p>Выключите уведомления, уберите телефон и сосредоточьтесь на задаче.</p>
-                <h3>5. Награждайте себя</h3>
-                <p>После выполнения задачи поощряйте себя чем-то приятным (перерыв, чай, прогулка).</p>
-            `
-        }
-    ];
-
-    let selectedAnswerIndex = null;
-    const correctAnswerIndex = 1; // Б) Адаптация материала под ученика
-
-    function getArticleId() {
-        const params = new URLSearchParams(window.location.search);
-        return parseInt(params.get('id'));
-    }
-
-    function saveAnswer() {
-        const answerField = document.getElementById('answerField');
-        const status = document.getElementById('saveStatus');
-        const answer = answerField.value.trim();
-        
-        if (!answer) {
-            status.textContent = '❌ Пожалуйста, напишите ответ перед сохранением.';
-            status.className = 'save-status error';
-            return;
-        }
-        
-        localStorage.setItem('savedAnswer_' + getArticleId(), answer);
-        status.textContent = '✅ Ответ сохранён! (' + new Date().toLocaleString('ru-RU') + ')';
-        status.className = 'save-status success';
-    }
-
-    function selectAnswer(index) {
-        selectedAnswerIndex = index;
-        const options = document.querySelectorAll('.quiz-option');
-        options.forEach((el, i) => {
-            el.classList.remove('selected', 'correct', 'wrong');
-            if (i === index) {
-                el.classList.add('selected');
-            }
-        });
-        
-        const result = document.getElementById('quizResult');
-        if (index === correctAnswerIndex) {
-            result.innerHTML = '✅ Правильно! Адаптация материала под ученика — это главное преимущество ИИ.';
-            result.style.color = '#28a745';
-        } else {
-            result.innerHTML = '❌ Попробуйте еще раз. Вспомните, что ИИ помогает персонализировать обучение.';
-            result.style.color = '#dc3545';
-        }
-    }
-
-    function renderArticle() {
-        const id = getArticleId();
-        const article = articles.find(a => a.id === id);
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html">📚 Instrumenty-AI</a></div>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="blog.html">Блог</a></li>
+                <li><a href="courses.html">Курсы</a></li>
+                <li><a href="my-courses.html">Мои курсы</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="articleContainer"><p>Загрузка статьи...</p></div>
+        <a href="blog.html">← Вернуться к списку</a>
+    </main>
+    <footer><p>&copy; 2026 Instrumenty-AI. Образовательный портал.</p></footer>
+    <script>
+        const articles = [
+            { id: 1, icon: "🤖", date: "27 марта 2026", title: "Как ИИ меняет образование", content: "<p>ИИ меняет образование...</p>" },
+            { id: 2, icon: "📚", date: "25 марта 2026", title: "5 методов эффективного обучения", content: "<p>5 методов...</p>" },
+            { id: 3, icon: "🎓", date: "22 марта 2026", title: "Подготовка к экзаменам", content: "<p>Подготовка...</p>" },
+            { id: 4, icon: "💻", date: "20 марта 2026", title: "Лучшие бесплатные ресурсы", content: "<p>Ресурсы...</p>" },
+            { id: 5, icon: "🧠", date: "18 марта 2026", title: "Нейропластичность", content: "<p>Нейропластичность...</p>" },
+            { id: 6, icon: "🎯", date: "15 марта 2026", title: "Как не прокрастинировать", content: "<p>Прокрастинация...</p>" }
+        ];
+        const id = new URLSearchParams(window.location.search).get('id');
+        const article = articles.find(a => a.id == id);
         const container = document.getElementById('articleContainer');
-        
-        if (!article) {
-            container.innerHTML = `
-                <p>Статья не найдена. <a href="blog.html">Вернуться к списку</a></p>
-            `;
-            return;
+        if (article) {
+            container.innerHTML = `<h1>${article.icon} ${article.title}</h1><p>${article.date}</p><div>${article.content}</div>`;
+        } else {
+            container.innerHTML = '<p>Статья не найдена.</p>';
         }
-
-        container.innerHTML = `
-            <h1>${article.icon} ${article.title}</h1>
-            <p class="article-date">${article.date}</p>
-            <div class="article-content">${article.content}</div>
-        `;
-
-        // Загружаем сохранённый ответ
-        const saved = localStorage.getItem('savedAnswer_' + id);
-        if (saved) {
-            const field = document.getElementById('answerField');
-            const status = document.getElementById('saveStatus');
-            if (field) {
-                field.value = saved;
-                status.textContent = '📂 Загружен сохранённый ответ';
-                status.className = 'save-status success';
-            }
-        }
-    }
-
-    renderArticle();
-</script>
-
+    </script>
 </body>
 </html>
